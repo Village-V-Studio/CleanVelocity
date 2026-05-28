@@ -1,7 +1,8 @@
 #Wiki: https://docs.papermc.io/velocity/configuration
-config-version = "2.7"
+config-version = "cv-2.8"
 
 bind = "127.0.0.1:25565"
+secret = ""
 online-mode = true
 player-info-forwarding-mode = "none"
 ping-passthrough = "disabled"
@@ -12,11 +13,6 @@ tcp-fast-open = false
 haproxy-protocol = false
 compression-threshold = 256
 compression-level = 6
-
-[packet-limiter]
-interval = 7
-packets-per-second = 500
-bytes-per-second = -1
 
 [servers]
 server = "127.0.0.1:25566"

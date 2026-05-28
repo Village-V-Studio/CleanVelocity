@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,11 +45,11 @@ public class MinecraftCompressDecoder extends MessageToMessageDecoder<ByteBuf> {
           Boolean.getBoolean("velocity.increased-compression-cap")
                   ? HARD_MAXIMUM_UNCOMPRESSED_SIZE : SERVERBOUND_MAXIMUM_UNCOMPRESSED_SIZE;
   private static final boolean SKIP_COMPRESSION_VALIDATION = Boolean.getBoolean("velocity.skip-uncompressed-packet-size-validation");
-  private static final double MAX_COMPRESSION_RATIO = Double.parseDouble(System.getProperty("velocity.max-compression-ratio", "64"));
   private final ProtocolUtils.Direction direction;
 
   private int threshold;
   private final VelocityCompressor compressor;
+
 
   /**
    * Creates a new {@code MinecraftCompressDecoder} with the specified compression {@code threshold}.
@@ -76,7 +77,6 @@ public class MinecraftCompressDecoder extends MessageToMessageDecoder<ByteBuf> {
       out.add(in.retain());
       return;
     }
-    int length = in.readableBytes();
 
     checkFrame(claimedUncompressedSize >= threshold, "Uncompressed size %s is less than"
         + " threshold %s", claimedUncompressedSize, threshold);
@@ -88,15 +88,13 @@ public class MinecraftCompressDecoder extends MessageToMessageDecoder<ByteBuf> {
       checkFrame(claimedUncompressedSize <= SERVERBOUND_UNCOMPRESSED_CAP,
               "Uncompressed size %s exceeds hard threshold of %s", claimedUncompressedSize,
               SERVERBOUND_UNCOMPRESSED_CAP);
-      double maxCompressedAllowed = length * MAX_COMPRESSION_RATIO;
-      checkFrame(claimedUncompressedSize <= maxCompressedAllowed,
-              "Uncompressed size %s exceeds ratio threshold of %s for compressed sized %s", claimedUncompressedSize,
-              maxCompressedAllowed, length);
     }
     ByteBuf compatibleIn = ensureCompatible(ctx.alloc(), compressor, in);
     ByteBuf uncompressed = preferredBuffer(ctx.alloc(), compressor, claimedUncompressedSize);
     try {
       compressor.inflate(compatibleIn, uncompressed, claimedUncompressedSize);
+      checkFrame(uncompressed.writerIndex() == claimedUncompressedSize,
+              "Decompressed size %s does not match claimed uncompressed size %s", uncompressed.writerIndex(), claimedUncompressedSize);
       out.add(uncompressed);
     } catch (Exception e) {
       uncompressed.release();
@@ -114,4 +112,6 @@ public class MinecraftCompressDecoder extends MessageToMessageDecoder<ByteBuf> {
   public void setThreshold(int threshold) {
     this.threshold = threshold;
   }
+
+
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -264,14 +265,8 @@ public class InitialLoginSessionHandler implements MinecraftSessionHandler {
               inbound.disconnect(Component.translatable("multiplayer.disconnect.authservers_down"));
             }
           }, mcConnection.eventLoop())
-          .thenRun(() -> {
-            try {
-              httpClient.close();
-            } catch (Exception e) {
-              // In Java 21, the HttpClient does not throw any Exception
-              // when trying to clean its resources, so this should not happen
-              logger.error("An unknown error occurred while trying to close an HttpClient", e);
-            }
+          .whenComplete((ignored, throwable) -> {
+            httpClient.close();
           });
     } catch (GeneralSecurityException e) {
       logger.error("Unable to enable encryption", e);

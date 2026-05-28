@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +86,8 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -100,13 +103,25 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class ClientPlaySessionHandler implements MinecraftSessionHandler {
 
-  private static final boolean BACKPRESSURE_LOG = Boolean.getBoolean("velocity.log-server-backpressure");
+  private static final boolean BACKPRESSURE_LOG =
+      Boolean.getBoolean("velocity.log-server-backpressure");
+
+  // Caps the per-connection queue used while the FML/login phases are not yet "complete". Without
+  // these caps, a client that never completes its handshake phase can spam plugin messages (each up
+  // to ~32 KiB serverbound) and grow the queue without bound.
+  private static final long MAX_QUEUED_LOGIN_PLUGIN_MESSAGE_BYTES =
+      Long.getLong("velocity.max-queued-login-plugin-message-bytes", 4L * 1024 * 1024);
+  private static final int MAX_QUEUED_LOGIN_PLUGIN_MESSAGES =
+      Integer.getInteger("velocity.max-queued-login-plugin-messages", 1024);
   private static final Logger logger = LogManager.getLogger(ClientPlaySessionHandler.class);
 
   private final ConnectedPlayer player;
   private boolean spawned = false;
   private final List<UUID> serverBossBars = new ArrayList<>();
   private final Queue<PluginMessagePacket> loginPluginMessages = new ConcurrentLinkedQueue<>();
+  private final AtomicLong loginPluginMessagesBytes = new AtomicLong();
+  private final AtomicInteger loginPluginMessagesCount = new AtomicInteger();
+  private volatile boolean loginPluginMessagesOverflowed;
   private final VelocityServer server;
   private @Nullable TabCompleteRequestPacket outstandingTabComplete;
   private final ChatHandler<? extends MinecraftPacket> chatHandler;
@@ -173,9 +188,38 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
   @Override
   public void deactivated() {
     player.discardChatQueue();
-    for (PluginMessagePacket message : loginPluginMessages) {
+    PluginMessagePacket message;
+    while ((message = loginPluginMessages.poll()) != null) {
       ReferenceCountUtil.release(message);
     }
+    loginPluginMessagesBytes.set(0);
+    loginPluginMessagesCount.set(0);
+  }
+
+  /**
+   * Adds a retained plugin message to the queue used while the FML/login phases are still in
+   * progress, enforcing the per-connection byte and count caps. Returns {@code true} if queued,
+   * {@code false} if the packet was released (and the player disconnected on overflow).
+   */
+  private boolean enqueueLoginPluginMessage(PluginMessagePacket packet) {
+    if (loginPluginMessagesOverflowed) {
+      ReferenceCountUtil.release(packet);
+      return false;
+    }
+    int packetSize = packet.content().readableBytes();
+    long newBytes = loginPluginMessagesBytes.addAndGet(packetSize);
+    int newCount = loginPluginMessagesCount.incrementAndGet();
+    if (newBytes > MAX_QUEUED_LOGIN_PLUGIN_MESSAGE_BYTES
+        || newCount > MAX_QUEUED_LOGIN_PLUGIN_MESSAGES) {
+      loginPluginMessagesOverflowed = true;
+      ReferenceCountUtil.release(packet);
+      logger.warn("Disconnecting {}: pre-join plugin-message queue exceeded its limits "
+              + "({} messages, {} bytes).", player, newCount, newBytes);
+      player.disconnect(Component.translatable("velocity.error.plugin-message-overflow"));
+      return false;
+    }
+    loginPluginMessages.add(packet);
+    return true;
   }
 
   @Override
@@ -357,7 +401,7 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
               //
               // We also need to make sure to retain these packets, so they can be flushed
               // appropriately.
-              loginPluginMessages.add(packet.retain());
+              enqueueLoginPluginMessage(packet.retain());
             } else {
               // The connection is ready, send the packet now.
               backendConn.write(packet.retain());
@@ -371,9 +415,8 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
                     Unpooled.wrappedBuffer(copy));
                 if (!player.getPhase().consideredComplete() || !serverConn.getPhase()
                     .consideredComplete()) {
-                  // We're still processing the connection (see above), enqueue the packet for
-                  // now.
-                  loginPluginMessages.add(message.retain());
+                  // We're still processing the connection (see above), enqueue the packet for now.
+                  enqueueLoginPluginMessage(message.retain());
                 } else {
                   backendConn.write(message);
                 }
@@ -510,10 +553,9 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
 
   @Override
   public void exception(Throwable throwable) {
-    player.disconnect(
-        Component.translatable("velocity.error.player-connection-error", NamedTextColor.RED));
+    player.disconnect(Component.translatable("velocity.error.player-connection-error", NamedTextColor.RED));
     if (MinecraftDecoder.DEBUG) {
-      logger.info("Exception while handling plugin message packet for {}", player, throwable);
+      logger.info("Exception while handling packet for {}", player, throwable);
     }
   }
 
@@ -647,6 +689,8 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
     while ((pm = loginPluginMessages.poll()) != null) {
       serverMc.delayedWrite(pm);
     }
+    loginPluginMessagesBytes.set(0);
+    loginPluginMessagesCount.set(0);
 
     // Clear any title from the previous server.
     if (player.getProtocolVersion().noLessThan(ProtocolVersion.MINECRAFT_1_8)) {
@@ -879,6 +923,8 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
         while ((pm = loginPluginMessages.poll()) != null) {
           connection.write(pm);
         }
+        loginPluginMessagesBytes.set(0);
+        loginPluginMessagesCount.set(0);
       }
     }
   }

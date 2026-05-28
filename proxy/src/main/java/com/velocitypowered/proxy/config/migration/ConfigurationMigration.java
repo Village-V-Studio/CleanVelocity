@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +27,10 @@ import org.apache.logging.log4j.Logger;
  */
 public sealed interface ConfigurationMigration
     permits ForwardingMigration,
-    KeyAuthenticationMigration,
-    MiniMessageTranslationsMigration,
-    TransferIntegrationMigration {
+            KeyAuthenticationMigration,
+            MiniMessageTranslationsMigration,
+            TransferIntegrationMigration,
+            SecretMigration {
   boolean shouldMigrate(CommentedFileConfig config);
 
   void migrate(CommentedFileConfig config, Logger logger) throws IOException;
@@ -40,7 +42,10 @@ public sealed interface ConfigurationMigration
    * @return configuration version
    */
   default double configVersion(CommentedFileConfig config) {
-    final String stringVersion = config.getOrElse("config-version", "1.0");
+    String stringVersion = config.getOrElse("config-version", "1.0");
+    if (stringVersion.startsWith("cv-")) {
+      stringVersion = stringVersion.substring(3);
+    }
     try {
       return Double.parseDouble(stringVersion);
     } catch (Exception e) {

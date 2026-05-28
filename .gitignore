@@ -25,7 +25,7 @@ local.properties
 .recommenders/
 .apt_generated/
 .project
-.classpath\
+.classpath
 .vscode
 
 ### Linux ###
@@ -79,6 +79,7 @@ $RECYCLE.BIN/
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
+.kotlin/
 
 ### Other trash ###
 logs/

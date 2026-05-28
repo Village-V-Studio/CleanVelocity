@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -267,7 +268,7 @@ public class ClientConfigSessionHandler implements MinecraftSessionHandler {
   public void exception(Throwable throwable) {
     player.disconnect(Component.translatable("velocity.error.player-connection-error", NamedTextColor.RED));
     if (MinecraftDecoder.DEBUG) {
-      logger.info("Exception while handling plugin message packet for {}", player, throwable);
+      logger.info("Exception while handling packet for {}", player, throwable);
     }
   }
 

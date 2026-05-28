@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +21,6 @@ package com.velocitypowered.proxy.protocol.netty;
 import static io.netty.util.ByteProcessor.FIND_NON_NUL;
 
 import com.velocitypowered.api.network.ProtocolVersion;
-import com.velocitypowered.proxy.network.limiter.PacketLimiter;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.StateRegistry;
@@ -33,7 +33,7 @@ import io.netty.handler.codec.CorruptedFrameException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jspecify.annotations.Nullable;
+
 
 /**
  * Frames Minecraft server packets which are prefixed by a 21-bit VarInt
@@ -52,8 +52,7 @@ public class MinecraftVarintFrameDecoder extends ByteToMessageDecoder {
 
   private final ProtocolUtils.Direction direction;
   private StateRegistry state;
-  @Nullable
-  private PacketLimiter packetLimiter;
+
 
   /**
    * Creates a new {@code MinecraftVarintFrameDecoder} decoding packets from the
@@ -114,14 +113,6 @@ public class MinecraftVarintFrameDecoder extends ByteToMessageDecoder {
         if (in.readableBytes() < length) {
           in.readerIndex(packetStart);
         } else {
-          // If enabled, rate-limit serverbound payload bytes based on frame length
-          if (packetLimiter != null) {
-            if (!packetLimiter.account(length)) {
-              throw new QuietDecoderException(
-                      "Rate limit exceeded while processing packets for %s".formatted(
-                              ctx.channel().remoteAddress()));
-            }
-          }
           out.add(in.readRetainedSlice(length));
         }
       }
@@ -272,9 +263,5 @@ public class MinecraftVarintFrameDecoder extends ByteToMessageDecoder {
 
   public void setState(StateRegistry stateRegistry) {
     this.state = stateRegistry;
-  }
-
-  public void setPacketLimiter(@Nullable PacketLimiter packetLimiter) {
-    this.packetLimiter = packetLimiter;
   }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018-2023 Velocity Contributors
+ * Copyright (C) 2026 Village V Studio
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +62,7 @@ public class InitialConnectSessionHandler implements MinecraftSessionHandler {
       }
 
       byte[] copy = ByteBufUtil.getBytes(packet.content());
-      PluginMessageEvent event = new PluginMessageEvent(serverConn, serverConn.getPlayer(), id,
-          copy);
+      PluginMessageEvent event = new PluginMessageEvent(player, serverConn, id, copy);
       server.getEventManager().fire(event)
           .thenAcceptAsync(pme -> {
             if (pme.getResult().isAllowed() && serverConn.isActive()) {
