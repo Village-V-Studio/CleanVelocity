@@ -96,8 +96,6 @@ tasks {
         // Exclude Checker Framework annotations
         exclude("org/checkerframework/checker/**")
 
-        relocate("org.bstats", "com.velocitypowered.proxy.bstats")
-
         // Include Configurate 3
         val configurateBuildTask = project(":deprecated-configurate3").tasks.named("shadowJar")
         dependsOn(configurateBuildTask)
@@ -163,7 +161,6 @@ dependencies {
     implementation(libs.adventure.facet)
     implementation(libs.completablefutures)
     implementation(libs.nightconfig)
-    implementation(libs.bstats)
     implementation(libs.lmbda)
     implementation(libs.asm)
     implementation(libs.bundles.flare)
