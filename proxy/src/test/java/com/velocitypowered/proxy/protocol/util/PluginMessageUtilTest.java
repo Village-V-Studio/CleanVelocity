@@ -40,8 +40,6 @@ class PluginMessageUtilTest {
         .transformLegacyToModernChannel("REGISTER"));
     assertEquals("minecraft:unregister", PluginMessageUtil
         .transformLegacyToModernChannel("UNREGISTER"));
-    assertEquals("bungeecord:main", PluginMessageUtil
-        .transformLegacyToModernChannel("BungeeCord"));
   }
 
   @Test

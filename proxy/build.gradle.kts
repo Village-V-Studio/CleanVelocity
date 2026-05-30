@@ -18,6 +18,15 @@ tasks {
         exclude("**/com/velocitypowered/proxy/protocol/packet/**")
     }
 
+    withType<JavaCompile> {
+        options.compilerArgs.addAll(
+            listOf(
+                "-Alog4j.graalvm.groupId=${project.group}",
+                "-Alog4j.graalvm.artifactId=${project.name}"
+            )
+        )
+    }
+
     jar {
         manifest {
             attributes["Implementation-Title"] = "CleanVelocity"

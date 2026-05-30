@@ -34,11 +34,6 @@ class VelocityChannelRegistrarTest {
   private static final LegacyChannelIdentifier SIMPLE_LEGACY =
       new LegacyChannelIdentifier("VelocityTest");
 
-  private static final MinecraftChannelIdentifier MODERN_SPECIAL_REMAP = MinecraftChannelIdentifier
-      .create("bungeecord", "main");
-  private static final LegacyChannelIdentifier SPECIAL_REMAP_LEGACY =
-      new LegacyChannelIdentifier("BungeeCord");
-
   private static final String SIMPLE_LEGACY_REMAPPED = "legacy:velocitytest";
 
   @Test
@@ -52,18 +47,6 @@ class VelocityChannelRegistrarTest {
         .getModernChannelIds().stream().map(ChannelIdentifier::getId).collect(Collectors.toSet()));
     assertEquals(ImmutableSet.of(SIMPLE_LEGACY.getId(), MODERN.getId()), registrar
         .getLegacyChannelIds().stream().map(ChannelIdentifier::getId).collect(Collectors.toSet()));
-  }
-
-  @Test
-  void registerSpecialRewrite() {
-    VelocityChannelRegistrar registrar = new VelocityChannelRegistrar();
-    registrar.register(SPECIAL_REMAP_LEGACY, MODERN_SPECIAL_REMAP);
-
-    // This one, just one channel for the modern case.
-    assertEquals(ImmutableSet.of(MODERN_SPECIAL_REMAP.getId()),
-        registrar.getModernChannelIds().stream().map(ChannelIdentifier::getId).collect(Collectors.toSet()));
-    assertEquals(ImmutableSet.of(MODERN_SPECIAL_REMAP.getId(), SPECIAL_REMAP_LEGACY.getId()),
-        registrar.getLegacyChannelIds().stream().map(ChannelIdentifier::getId).collect(Collectors.toSet()));
   }
 
   @Test

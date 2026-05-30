@@ -3,6 +3,9 @@ name: Build and Release
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,6 +45,10 @@ jobs:
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
           echo "CLEAN_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
 
+      - name: Rename Release Jar
+        run: |
+          mv "proxy/build/libs/CleanVelocity-${{ env.FULL_VERSION }}-all.jar" "proxy/build/libs/CleanVelocity-${{ env.CLEAN_VERSION }}.jar"
+
       - name: Create or Update Release
         uses: softprops/action-gh-release@v2
         with:
@@ -50,9 +57,11 @@ jobs:
           body: |
             Changes:
 
-            soon
+            - soon
+
+            Velocity API - 3.5.0-SNAPSHOT
           draft: false
           prerelease: false
-          files: proxy/build/libs/CleanVelocity-*.jar
+          files: proxy/build/libs/CleanVelocity-${{ env.CLEAN_VERSION }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

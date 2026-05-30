@@ -243,10 +243,6 @@ public final class PluginMessageUtil {
       case REGISTER_CHANNEL_LEGACY -> REGISTER_CHANNEL;
       case UNREGISTER_CHANNEL_LEGACY -> UNREGISTER_CHANNEL;
       case BRAND_CHANNEL_LEGACY -> BRAND_CHANNEL;
-      // This is a special historical case we are compelled to support for the benefit
-      // of
-      // BungeeQuack.
-      case "BungeeCord" -> "bungeecord:main";
       default -> {
         // This is very likely a legacy name, so transform it. Velocity uses the same
         // scheme as
