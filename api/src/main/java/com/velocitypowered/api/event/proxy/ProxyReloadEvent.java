@@ -8,7 +8,7 @@
 package com.velocitypowered.api.event.proxy;
 
 /**
- * This event is fired when the proxy is reloaded by the user using {@code /velocity reload}.
+ * This event is fired when the proxy is reloaded by the user using {@code /server reload}.
  */
 public class ProxyReloadEvent {
 

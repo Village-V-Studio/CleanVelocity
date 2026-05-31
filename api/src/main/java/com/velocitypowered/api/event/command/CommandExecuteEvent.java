@@ -66,9 +66,9 @@ public final class CommandExecuteEvent implements ResultedEvent<CommandResult> {
    *
    * @return the original command being executed
    * @apiNote Note that the player can provide a command that begins with spaces,
-   *          but still be validly executed. For example, the command {@code /  velocity info},
+   *          but still be validly executed. For example, the command {@code /  server reload},
    *          although not valid in the chat bar, will be executed as correctly as if
-   *          the player had executed {@code /velocity info}
+   *          the player had executed {@code /server reload}
    */
   public String getCommand() {
     return command;

@@ -59,6 +59,7 @@ jobs:
 
             - soon
 
+            Requires Java 21 or higher.
             Velocity API - 3.5.0-SNAPSHOT
           draft: false
           prerelease: false
