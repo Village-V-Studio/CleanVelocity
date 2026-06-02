@@ -42,7 +42,7 @@ public interface ProxyConfig {
   boolean isOnlineMode();
 
   /**
-   * Get a Map of all servers registered in <code>velocity.toml</code>. This
+   * Get a Map of all servers registered in <code>config.toml</code>. This
    * method does
    * <strong>not</strong> return all the servers currently in memory, although in
    * most cases it

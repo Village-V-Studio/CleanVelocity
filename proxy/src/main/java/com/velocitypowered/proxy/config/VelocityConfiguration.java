@@ -322,7 +322,7 @@ public class VelocityConfiguration implements ProxyConfig {
   @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
   public static VelocityConfiguration read(Path path) throws IOException {
     URL defaultConfigLocation = VelocityConfiguration.class.getClassLoader()
-        .getResource("default-velocity.toml");
+        .getResource("default-config.toml");
     if (defaultConfigLocation == null) {
       throw new RuntimeException("Default configuration file does not exist.");
     }

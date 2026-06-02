@@ -347,7 +347,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   @SuppressFBWarnings("DM_EXIT")
   private void doStartupConfigLoad() {
     try {
-      Path configPath = Path.of("velocity.toml");
+      Path configPath = Path.of("config.toml");
       configuration = VelocityConfiguration.read(configPath);
 
       if (!configuration.validate()) {
@@ -358,7 +358,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
       }
 
     } catch (Exception e) {
-      logger.error("Unable to read/load/save your velocity.toml. The server will shut down.", e);
+      logger.error("Unable to read/load/save your config.toml. The server will shut down.", e);
       LogManager.shutdown();
       System.exit(1);
     }
@@ -420,10 +420,10 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
    *
    * @return {@code true} if successful, {@code false} if we can't read the
    *         configuration
-   * @throws IOException if we can't read {@code velocity.toml}
+   * @throws IOException if we can't read {@code config.toml}
    */
   public boolean reloadConfiguration() throws IOException {
-    Path configPath = Path.of("velocity.toml");
+    Path configPath = Path.of("config.toml");
     VelocityConfiguration newConfiguration = VelocityConfiguration.read(configPath);
 
     if (!newConfiguration.validate()) {

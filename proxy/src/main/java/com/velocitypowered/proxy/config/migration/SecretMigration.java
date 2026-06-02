@@ -38,7 +38,7 @@ public final class SecretMigration implements ConfigurationMigration {
   public void migrate(final CommentedFileConfig config, final Logger logger) throws IOException {
     logger.warn("""
         You are currently using a configuration format with the forwarding secret in a separate file.
-        We will migrate your secret directly into the velocity.toml config under the 'secret' key.""");
+        We will migrate your secret directly into the config.toml config under the 'secret' key.""");
 
     String actualSecret = null;
     final String forwardingSecretFile = config.get("forwarding-secret-file");
