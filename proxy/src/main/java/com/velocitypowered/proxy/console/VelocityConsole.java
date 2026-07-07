@@ -26,6 +26,7 @@ import com.velocitypowered.api.permission.Tristate;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.util.ClosestLocaleMatcher;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import net.kyori.adventure.audience.MessageType;
@@ -114,6 +115,7 @@ public final class VelocityConsole extends SimpleTerminalConsole implements Cons
   protected LineReader buildReader(LineReaderBuilder builder) {
     return super.buildReader(builder
         .appName("Velocity")
+        .variable(LineReader.HISTORY_FILE, Path.of("logs", ".console_history"))
         .completer((reader, parsedLine, list) -> {
           try {
             List<String> offers = this.server.getCommandManager()
