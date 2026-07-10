@@ -57,12 +57,11 @@ import net.kyori.option.OptionSchema;
 public enum ProtocolUtils {
   ;
 
-  @SuppressWarnings("deprecation")
-  private static final GsonComponentSerializer PRE_1_16_SERIALIZER = GsonComponentSerializer.builder()
-      .downsampleColors()
-      .legacyHoverEventSerializer(NBTLegacyHoverEventSerializer.get())
-      .options(
-          OptionSchema.globalSchema().stateBuilder()
+  private static final GsonComponentSerializer PRE_1_16_SERIALIZER =
+      GsonComponentSerializer.builder()
+          .legacyHoverEventSerializer(NBTLegacyHoverEventSerializer.get())
+          .options(
+              OptionSchema.globalSchema().stateBuilder()
               // general options
               .value(JSONOptions.EMIT_CLICK_URL_HTTPS, Boolean.TRUE)
               // before 1.16

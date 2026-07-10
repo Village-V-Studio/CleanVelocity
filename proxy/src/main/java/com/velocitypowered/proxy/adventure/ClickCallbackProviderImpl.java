@@ -31,7 +31,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 @SuppressWarnings("UnstableApiUsage") // permitted provider
 public class ClickCallbackProviderImpl implements ClickCallback.Provider {
   @Override
-  public  ClickEvent create(
+  public ClickEvent<?> create(
       final ClickCallback<Audience> callback,
       final ClickCallback.Options options
   ) {
