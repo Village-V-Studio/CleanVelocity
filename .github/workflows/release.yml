@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Make gradlew executable
         run: chmod +x gradlew
@@ -58,7 +58,7 @@ jobs:
             **Full Changelog**: 
 
             Requires Java 25 or higher.
-            Velocity API - 4.0.0-SNAPSHOT
+            Velocity API - 4.1.0-SNAPSHOT
           draft: false
           prerelease: false
           files: proxy/build/libs/CleanVelocity-${{ env.CLEAN_VERSION }}.jar
