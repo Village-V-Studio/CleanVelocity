@@ -74,7 +74,7 @@ public class JavaVelocityCompressor implements VelocityCompressor {
         throw new DataFormatException("Received a deflate stream that was too large, wanted "
             + uncompressedSize);
       }
-      source.readerIndex(origIdx + inflater.getTotalIn());
+      source.readerIndex(origIdx + (int) inflater.getBytesRead());
     } finally {
       inflater.reset();
     }
@@ -103,7 +103,7 @@ public class JavaVelocityCompressor implements VelocityCompressor {
       destination.writerIndex(destination.writerIndex() + produced);
     }
 
-    source.readerIndex(origIdx + deflater.getTotalIn());
+    source.readerIndex(origIdx + (int) deflater.getBytesRead());
     deflater.reset();
   }
 
