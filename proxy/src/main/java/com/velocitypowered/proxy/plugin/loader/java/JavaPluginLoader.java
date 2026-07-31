@@ -179,6 +179,7 @@ public class JavaPluginLoader implements PluginLoader {
         description.getUrl(),
         description.getAuthors(),
         dependencies,
+        description.getProvides(),
         source,
         description.getMain());
   }
@@ -194,6 +195,7 @@ public class JavaPluginLoader implements PluginLoader {
         description.getUrl().orElse(null),
         description.getAuthors(),
         description.getDependencies(),
+        description.getProvidedIds(),
         description.getSource().orElse(null),
         mainClass);
   }
