@@ -33,7 +33,6 @@ import com.velocitypowered.proxy.config.migration.KeyAuthenticationMigration;
 import com.velocitypowered.proxy.config.migration.MiniMessageTranslationsMigration;
 import com.velocitypowered.proxy.config.migration.SecretMigration;
 import com.velocitypowered.proxy.config.migration.TransferIntegrationMigration;
-import com.velocitypowered.proxy.config.migration.PingPassthroughMigration;
 import com.velocitypowered.proxy.util.AddressUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
@@ -342,8 +341,7 @@ public class VelocityConfiguration implements ProxyConfig {
 
           new MiniMessageTranslationsMigration(),
           new TransferIntegrationMigration(),
-          new SecretMigration(),
-          new PingPassthroughMigration()
+          new SecretMigration()
       };
 
       for (final ConfigurationMigration migration : migrations) {

@@ -323,7 +323,6 @@ public class VelocityServerConnection implements MinecraftConnectionAssociation,
     this.clientLoaded = clientLoaded;
   }
 
-  @Override
   public boolean isClientLoaded() {
     return clientLoaded;
   }
