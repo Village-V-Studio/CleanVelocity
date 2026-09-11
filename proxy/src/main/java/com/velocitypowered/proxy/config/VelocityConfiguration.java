@@ -33,6 +33,7 @@ import com.velocitypowered.proxy.config.migration.KeyAuthenticationMigration;
 import com.velocitypowered.proxy.config.migration.MiniMessageTranslationsMigration;
 import com.velocitypowered.proxy.config.migration.SecretMigration;
 import com.velocitypowered.proxy.config.migration.TransferIntegrationMigration;
+import com.velocitypowered.proxy.config.migration.PingPassthroughMigration;
 import com.velocitypowered.proxy.util.AddressUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class VelocityConfiguration implements ProxyConfig {
   private PlayerInfoForwarding playerInfoForwardingMode = PlayerInfoForwarding.NONE;
   private byte[] forwardingSecret = generateRandomString(12).getBytes(StandardCharsets.UTF_8);
   @Expose
-  private PingPassthroughMode pingPassthrough = PingPassthroughMode.DISABLED;
+  private PingPassthroughMode pingPassthrough = PingPassthroughMode.DEFAULT;
   private final Servers servers;
   @Expose
   private final Advanced advanced;
@@ -341,7 +342,8 @@ public class VelocityConfiguration implements ProxyConfig {
 
           new MiniMessageTranslationsMigration(),
           new TransferIntegrationMigration(),
-          new SecretMigration()
+          new SecretMigration(),
+          new PingPassthroughMigration()
       };
 
       for (final ConfigurationMigration migration : migrations) {
@@ -364,8 +366,7 @@ public class VelocityConfiguration implements ProxyConfig {
       final CommentedConfig serversConfig = config.get("servers");
       final PlayerInfoForwarding forwardingMode = config.getEnumOrElse(
           "player-info-forwarding-mode", PlayerInfoForwarding.NONE);
-      final PingPassthroughMode pingPassthroughMode = config.getEnumOrElse("ping-passthrough",
-          PingPassthroughMode.DISABLED);
+      final PingPassthroughMode pingPassthroughMode = PingPassthroughMode.fromConfig(config.get("ping-passthrough"));
 
       final String bind = config.getOrElse("bind", "0.0.0.0:25565");
       final boolean onlineMode = config.getOrElse("online-mode", true);

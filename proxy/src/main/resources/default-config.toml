@@ -1,11 +1,21 @@
 #Wiki: https://docs.papermc.io/velocity/configuration
-config-version = "cv-2.8"
+config-version = "cv-2.9"
 
 bind = "127.0.0.1:25565"
 secret = ""
 online-mode = true
 player-info-forwarding-mode = "none"
-ping-passthrough = "disabled"
+[ping-passthrough]
+# Should Velocity pass the version number from the backend server when responding to server list ping requests?
+version = false
+# Should Velocity pass the player count from the backend server when responding to server list ping requests?
+players = false
+# Should Velocity pass the description from the backend server when responding to server list ping requests?
+description = false
+# Should Velocity pass the favicon (also known as the server icon) from the backend server when responding to server list ping requests?
+favicon = false
+# Should Velocity pass the mod list from the backend server when responding to server list ping requests?
+modinfo = false
 force-key-authentication = true
 accepts-transfers = false
 enable-reuse-port = false

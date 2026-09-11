@@ -30,7 +30,8 @@ public sealed interface ConfigurationMigration
             KeyAuthenticationMigration,
             MiniMessageTranslationsMigration,
             TransferIntegrationMigration,
-            SecretMigration {
+            SecretMigration,
+            PingPassthroughMigration {
   boolean shouldMigrate(CommentedFileConfig config);
 
   void migrate(CommentedFileConfig config, Logger logger) throws IOException;
