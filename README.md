@@ -15,8 +15,7 @@ Original [Velocity](https://github.com/PaperMC/Velocity) by [PaperMC](https://pa
 - Anti-spam settings: `command-rate-limit`, `forward-commands-if-rate-limited`, `kick-after-rate-limited-commands`, `tab-complete-rate-limit`, `kick-after-rate-limited-tab-completes`;
 - Specific features and logging: `kick-existing-players`, `sample-players-in-ping`, `log-player-connections`, `enable-player-address-logging`, `announce-forge`, `forwarding-secret-file`;
 - Other system settings: `bungee-plugin-message-channel`, `show-ping-requests`, `failover-on-unexpected-server-disconnect`, `announce-proxy-commands`, `log-command-executions`, `prevent-client-proxy-connections`;
-- Removed the `[query]` and `[packet-limiter]` system;
-- Removed the `[forced-hosts]` section;
+- Removed the `[query]`, `[forced-hosts]`, `[packet-limiter]` and `[ping-passthrough]` systems;
 - Removed all built-in commands. Only `/server reload|stop` remains;
 - And some other minor changes.
 

@@ -67,8 +67,7 @@ public class VelocityConfiguration implements ProxyConfig {
   @Expose
   private PlayerInfoForwarding playerInfoForwardingMode = PlayerInfoForwarding.NONE;
   private byte[] forwardingSecret = generateRandomString(12).getBytes(StandardCharsets.UTF_8);
-  @Expose
-  private PingPassthroughMode pingPassthrough = PingPassthroughMode.DEFAULT;
+
   private final Servers servers;
   @Expose
   private final Advanced advanced;
@@ -84,7 +83,6 @@ public class VelocityConfiguration implements ProxyConfig {
 
   private VelocityConfiguration(String bind, boolean onlineMode,
       PlayerInfoForwarding playerInfoForwardingMode, byte[] forwardingSecret,
-      PingPassthroughMode pingPassthrough,
       Servers servers,
       Advanced advanced,
       boolean forceKeyAuthentication) {
@@ -92,7 +90,6 @@ public class VelocityConfiguration implements ProxyConfig {
     this.onlineMode = onlineMode;
     this.playerInfoForwardingMode = playerInfoForwardingMode;
     this.forwardingSecret = forwardingSecret;
-    this.pingPassthrough = pingPassthrough;
     this.servers = servers;
     this.advanced = advanced;
 
@@ -280,9 +277,6 @@ public class VelocityConfiguration implements ProxyConfig {
     return advanced.isTcpFastOpen();
   }
 
-  public PingPassthroughMode getPingPassthrough() {
-    return pingPassthrough;
-  }
 
   public boolean isAcceptTransfers() {
     return this.advanced.isAcceptTransfers();
@@ -364,7 +358,7 @@ public class VelocityConfiguration implements ProxyConfig {
       final CommentedConfig serversConfig = config.get("servers");
       final PlayerInfoForwarding forwardingMode = config.getEnumOrElse(
           "player-info-forwarding-mode", PlayerInfoForwarding.NONE);
-      final PingPassthroughMode pingPassthroughMode = PingPassthroughMode.fromConfig(config.get("ping-passthrough"));
+
 
       final String bind = config.getOrElse("bind", "0.0.0.0:25565");
       final boolean onlineMode = config.getOrElse("online-mode", true);
@@ -384,7 +378,6 @@ public class VelocityConfiguration implements ProxyConfig {
           onlineMode,
           forwardingMode,
           forwardingSecret,
-          pingPassthroughMode,
           new Servers(serversConfig),
           new Advanced(config),
           forceKeyAuthentication

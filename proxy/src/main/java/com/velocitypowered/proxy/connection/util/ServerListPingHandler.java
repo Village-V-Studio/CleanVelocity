@@ -19,24 +19,12 @@
 package com.velocitypowered.proxy.connection.util;
 
 import com.google.common.collect.ImmutableList;
-import com.spotify.futures.CompletableFutures;
 import com.velocitypowered.api.network.ProtocolVersion;
-import com.velocitypowered.api.proxy.server.PingOptions;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
-import com.velocitypowered.api.util.Favicon;
-import com.velocitypowered.api.util.ModInfo;
 import com.velocitypowered.proxy.VelocityServer;
-import com.velocitypowered.proxy.config.PingPassthroughMode;
 import com.velocitypowered.proxy.config.VelocityConfiguration;
-import com.velocitypowered.proxy.server.VelocityRegisteredServer;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import net.kyori.adventure.text.Component;
 
 /**
  * Common utilities for handling server list ping results.
@@ -65,88 +53,6 @@ public class ServerListPingHandler {
         null);
   }
 
-  private CompletableFuture<ServerPing> attemptPingPassthrough(VelocityInboundConnection connection,
-      PingPassthroughMode mode, List<String> servers, ProtocolVersion responseProtocolVersion, String virtualHostStr) {
-    ServerPing fallback = constructLocalPing(connection.getProtocolVersion());
-    List<CompletableFuture<ServerPing>> pings = new ArrayList<>();
-    for (String s : servers) {
-      Optional<RegisteredServer> rs = server.getServer(s);
-      if (rs.isEmpty()) {
-        continue;
-      }
-      VelocityRegisteredServer vrs = (VelocityRegisteredServer) rs.get();
-      pings.add(vrs.ping(connection.getConnection().eventLoop(), PingOptions.builder()
-          .version(responseProtocolVersion).virtualHost(virtualHostStr).build()));
-    }
-    if (pings.isEmpty()) {
-      return CompletableFuture.completedFuture(fallback);
-    }
-
-    CompletableFuture<List<ServerPing>> pingResponses = CompletableFutures.successfulAsList(pings,
-        (ex) -> fallback);
-    // Return early if ping passthrough is not enabled
-    if (!mode.enabled()) {
-      return CompletableFuture.completedFuture(fallback);
-    }
-
-    return pingResponses.thenApply(responses -> {
-      // Find the first non-fallback
-      for (ServerPing response : responses) {
-        if (response == fallback) {
-          continue;
-        }
-
-        ServerPing.Version version;
-        if (mode.version()) {
-          version = response.getVersion();
-        } else {
-          version = fallback.getVersion();
-        }
-
-        ServerPing.Players players;
-        if (mode.players()) {
-          players = response.getPlayers().orElse(null);
-        } else {
-          players = fallback.getPlayers().orElse(null);
-        }
-
-        Component description;
-        if (mode.description()) {
-          if (response.getDescriptionComponent() != null) {
-            description = response.getDescriptionComponent();
-          } else {
-            description = Component.empty();
-          }
-        } else {
-          description = fallback.getDescriptionComponent();
-        }
-
-        Favicon favicon;
-        if (mode.favicon()) {
-          favicon = response.getFavicon().orElse(null);
-        } else {
-          favicon = fallback.getFavicon().orElse(null);
-        }
-
-        ModInfo modinfo;
-        if (mode.modinfo()) {
-          modinfo = response.getModinfo().orElse(null);
-        } else {
-          modinfo = fallback.getModinfo().orElse(null);
-        }
-
-        return new ServerPing(
-            version,
-            players,
-            description,
-            favicon,
-            modinfo
-        );
-      }
-      return fallback;
-    });
-  }
-
   /**
    * Fetches the "default" server ping for a player.
    *
@@ -154,20 +60,9 @@ public class ServerListPingHandler {
    * @return a future with the initial ping result
    */
   public CompletableFuture<ServerPing> getInitialPing(VelocityInboundConnection connection) {
-    VelocityConfiguration configuration = server.getConfiguration();
     ProtocolVersion shownVersion = connection.getProtocolVersion().isSupported()
         ? connection.getProtocolVersion()
         : ProtocolVersion.MAXIMUM_VERSION;
-    PingPassthroughMode passthroughMode = configuration.getPingPassthrough();
-
-    if (!passthroughMode.enabled()) {
-      return CompletableFuture.completedFuture(constructLocalPing(shownVersion));
-    } else {
-      String virtualHostStr = connection.getVirtualHost().map(InetSocketAddress::getHostString)
-          .map(str -> str.toLowerCase(Locale.ROOT))
-          .orElse("");
-      List<String> serversToTry = server.getConfiguration().getAttemptConnectionOrder();
-      return attemptPingPassthrough(connection, passthroughMode, serversToTry, shownVersion, virtualHostStr);
-    }
+    return CompletableFuture.completedFuture(constructLocalPing(shownVersion));
   }
 }
