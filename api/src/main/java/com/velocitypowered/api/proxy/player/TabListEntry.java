@@ -249,16 +249,12 @@ public interface TabListEntry extends KeyIdentifiable {
 
     /**
      * Sets the {@link IdentifiedKey} of the {@link TabListEntry}.
-     * <p>
-     * This only works for players currently <b>not</b> connected to this proxy.
-     * </p>
-     * <p>
-     * For any player currently connected to this proxy this will be filled
-     * automatically.
-     * </p>
-     * <p>
-     * Will ignore mismatching key revisions data.
-     * </p>
+     *
+     * <p>This only works for players currently <b>not</b> connected to this proxy.</p>
+     *
+     * <p>For any player currently connected to this proxy this will be filled automatically.</p>
+     *
+     * <p>Will ignore mismatching key revisions data.</p>
      *
      * @param chatSession session to set
      * @return {@code this}, for chaining
