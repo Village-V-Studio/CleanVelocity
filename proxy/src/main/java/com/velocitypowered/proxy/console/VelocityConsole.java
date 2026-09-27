@@ -134,7 +134,7 @@ public final class VelocityConsole extends SimpleTerminalConsole implements Cons
     try {
       if (!this.server.getCommandManager().executeAsync(this, command).join()) {
         sendMessage(Component.translatable("velocity.command.command-does-not-exist",
-            NamedTextColor.RED));
+            "This command does not exist.", NamedTextColor.RED));
         return;
       }
 

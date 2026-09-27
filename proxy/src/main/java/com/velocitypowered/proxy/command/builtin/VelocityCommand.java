@@ -93,14 +93,16 @@ public final class VelocityCommand {
       try {
         if (server.reloadConfiguration()) {
           source.sendMessage(Component.translatable("velocity.command.reload-success",
-              NamedTextColor.GREEN));
+              "CleanVelocity configuration successfully reloaded.", NamedTextColor.GREEN));
         } else {
           source.sendMessage(Component.translatable("velocity.command.reload-failure",
+              "Unable to reload your CleanVelocity configuration. Check the console for more details.",
               NamedTextColor.RED));
         }
       } catch (Exception e) {
         logger.error("Unable to reload configuration", e);
         source.sendMessage(Component.translatable("velocity.command.reload-failure",
+            "Unable to reload your CleanVelocity configuration. Check the console for more details.",
             NamedTextColor.RED));
       }
       return Command.SINGLE_SUCCESS;
