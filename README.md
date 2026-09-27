@@ -10,7 +10,7 @@ Original [Velocity](https://github.com/PaperMC/Velocity) by [PaperMC](https://pa
 
 - Removed bStats analytics;
 - Removed `lang` folder (you can still create this folder manually to load custom translation files);
-- Connection and timeout settings: `login-ratelimit`, `connection-timeout`, `read-timeout`;
+- Connection and timeout settings: `login-ratelimit`, `connection-timeout`, `read-timeout`, `try = ["server"]`;
 - Display settings: `motd`, `show-max-players`;
 - Anti-spam settings: `command-rate-limit`, `forward-commands-if-rate-limited`, `kick-after-rate-limited-commands`, `tab-complete-rate-limit`, `kick-after-rate-limited-tab-completes`;
 - Specific features and logging: `kick-existing-players`, `sample-players-in-ping`, `log-player-connections`, `enable-player-address-logging`, `announce-forge`, `forwarding-secret-file`;

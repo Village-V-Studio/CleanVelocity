@@ -105,6 +105,7 @@ import com.velocitypowered.proxy.util.collect.CappedSet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -879,21 +880,17 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
    * @return the next server to try
    */
   private Optional<RegisteredServer> getNextServerToTry(@Nullable RegisteredServer current) {
-    if (serversToTry == null) {
-      serversToTry = Collections.emptyList();
-    }
-
-    if (serversToTry.isEmpty()) {
-      List<String> connOrder = server.getConfiguration().getAttemptConnectionOrder();
-      if (connOrder.isEmpty()) {
+    List<String> order = this.serversToTry;
+    if (order == null || order.isEmpty()) {
+      order = server.getConfiguration().getAttemptConnectionOrder();
+      if (order.isEmpty()) {
         return Optional.empty();
-      } else {
-        serversToTry = connOrder;
       }
+      this.serversToTry = order;
     }
 
-    for (int i = tryIndex; i < serversToTry.size(); i++) {
-      String toTryName = serversToTry.get(i);
+    for (int i = tryIndex; i < order.size(); i++) {
+      String toTryName = order.get(i);
       if ((connectedServer != null && hasSameName(connectedServer.getServer(), toTryName))
           || (connectionInFlight != null && hasSameName(connectionInFlight.getServer(), toTryName))
           || (current != null && hasSameName(current, toTryName))) {
@@ -904,6 +901,32 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
       return server.getServer(toTryName);
     }
     return Optional.empty();
+  }
+
+  /**
+   * Returns the list of servers that will be attempted when connecting or falling back.
+   *
+   * @return the list of server names to try
+   */
+  public List<String> getServersToTry() {
+    if (this.serversToTry == null || this.serversToTry.isEmpty()) {
+      return this.server.getConfiguration().getAttemptConnectionOrder();
+    }
+    return Collections.unmodifiableList(this.serversToTry);
+  }
+
+  /**
+   * Sets the list of servers that will be attempted when connecting or falling back.
+   *
+   * @param servers the list of server names to try, or {@code null} to reset to default
+   */
+  public void setServersToTry(@Nullable List<String> servers) {
+    if (servers == null) {
+      this.serversToTry = null;
+    } else {
+      this.serversToTry = new ArrayList<>(servers);
+    }
+    this.tryIndex = 0;
   }
 
   private static boolean hasSameName(RegisteredServer server, String name) {

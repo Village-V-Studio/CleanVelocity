@@ -15,4 +15,3 @@ compression-level = 6
 
 [servers]
 server = "127.0.0.1:25566"
-try = ["server"]

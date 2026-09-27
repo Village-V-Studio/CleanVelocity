@@ -43,7 +43,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -412,7 +412,7 @@ public class VelocityConfiguration implements ProxyConfig {
 
     private Servers(CommentedConfig config) {
       if (config != null) {
-        Map<String, String> servers = new HashMap<>();
+        Map<String, String> servers = new LinkedHashMap<>();
         for (UnmodifiableConfig.Entry entry : config.entrySet()) {
           if (entry.getValue() instanceof String) {
             servers.put(cleanServerName(entry.getKey()), entry.getValue());
@@ -424,7 +424,12 @@ public class VelocityConfiguration implements ProxyConfig {
           }
         }
         this.servers = ImmutableMap.copyOf(servers);
-        this.attemptConnectionOrder = config.getOrElse("try", attemptConnectionOrder);
+        List<String> tryOrder = config.get("try");
+        if (tryOrder != null && !tryOrder.isEmpty()) {
+          this.attemptConnectionOrder = ImmutableList.copyOf(tryOrder);
+        } else {
+          this.attemptConnectionOrder = ImmutableList.copyOf(servers.keySet());
+        }
       }
     }
 
