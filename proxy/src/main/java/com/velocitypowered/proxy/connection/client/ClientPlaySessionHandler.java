@@ -74,7 +74,6 @@ import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerComma
 import com.velocitypowered.proxy.protocol.packet.config.FinishedUpdatePacket;
 import com.velocitypowered.proxy.protocol.packet.title.GenericTitlePacket;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
-import com.velocitypowered.proxy.util.CharacterUtil;
 import com.velocitypowered.proxy.util.except.QuietRuntimeException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -161,16 +160,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
     }
     if (!this.timeKeeper.update(instant)) {
       player.disconnect(Component.translatable("multiplayer.disconnect.out_of_order_chat"));
-      return false;
-    }
-    return true;
-  }
-
-  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  private boolean validateChat(String message) {
-    if (CharacterUtil.containsIllegalCharacters(message)) {
-      player.disconnect(
-          Component.translatable("velocity.error.illegal-chat-characters", NamedTextColor.RED));
       return false;
     }
     return true;
@@ -266,10 +255,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
       return true;
     }
 
-    if (!validateChat(packet.getCommand())) {
-      return true;
-    }
-
     return this.commandHandler.handlePlayerCommand(packet);
   }
 
@@ -280,10 +265,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
     }
 
     if (!updateTimeKeeper(packet.getTimestamp())) {
-      return true;
-    }
-
-    if (!validateChat(packet.getMessage())) {
       return true;
     }
 
@@ -300,10 +281,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
       return true;
     }
 
-    if (!validateChat(packet.getCommand())) {
-      return true;
-    }
-
     return this.commandHandler.handlePlayerCommand(packet);
   }
 
@@ -317,10 +294,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
       return true;
     }
 
-    if (!validateChat(packet.getMessage())) {
-      return true;
-    }
-
     return this.chatHandler.handlePlayerChat(packet);
   }
 
@@ -331,10 +304,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
     }
 
     String msg = packet.getMessage();
-    if (!validateChat(msg)) {
-      return true;
-    }
-
     if (msg.startsWith("/")) {
       this.commandHandler.handlePlayerCommand(packet);
     } else {
