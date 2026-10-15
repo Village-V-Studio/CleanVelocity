@@ -1,11 +1,9 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
-import io.papermc.fill.model.BuildChannel
 
 plugins {
     application
     id("velocity-init-manifest")
     alias(libs.plugins.shadow)
-    alias(libs.plugins.fill)
 }
 
 application {
@@ -69,24 +67,6 @@ tasks {
                 "-Alog4j.graalvm.artifactId=${project.name}"
             )
         )
-    }
-}
-
-val projectVersion = version as String
-fill {
-    project("velocity")
-
-    build {
-        channel = if (projectVersion.endsWith("-SNAPSHOT")) BuildChannel.BETA else BuildChannel.STABLE
-        versionFamily("4.0.0")
-        version(projectVersion)
-
-        downloads {
-            register("server:default") {
-                file = tasks.shadowJar.flatMap { it.archiveFile }
-                nameResolver.set { project, _, version, build -> "$project-$version-$build.jar" }
-            }
-        }
     }
 }
 
