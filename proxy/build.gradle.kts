@@ -43,11 +43,6 @@ tasks {
 
         // Exclude Checker Framework annotations
         exclude("org/checkerframework/checker/**")
-
-        // Include Configurate 3
-        val configurateBuildTask = project(":deprecated-configurate3").tasks.named("shadowJar")
-        dependsOn(configurateBuildTask)
-        from(zipTree(configurateBuildTask.map { it.outputs.files.singleFile }))
     }
 
     runShadow {

@@ -31,8 +31,3 @@ sequenceOf(
     include(project)
     project(project).projectDir = file(it)
 }
-
-// Include Configurate 3
-val deprecatedConfigurateModule = ":deprecated-configurate3"
-include(deprecatedConfigurateModule)
-project(deprecatedConfigurateModule).projectDir = file("proxy/deprecated/configurate3")
