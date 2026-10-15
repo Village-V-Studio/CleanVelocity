@@ -26,7 +26,7 @@ import com.velocitypowered.proxy.protocol.packet.chat.ChatAcknowledgementPacket;
 import java.util.concurrent.CompletableFuture;
 
 import com.velocitypowered.proxy.protocol.packet.chat.RateLimitedCommandHandler;
-import net.kyori.adventure.text.Component;
+import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedChatHandler;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class SessionCommandHandler extends RateLimitedCommandHandler<SessionPlayerCommandPacket> {
@@ -56,9 +56,7 @@ public class SessionCommandHandler extends RateLimitedCommandHandler<SessionPlay
       logger.fatal("A plugin tried to deny a command with signable component(s). "
           + "This is not supported. "
           + "Disconnecting player " + player.getUsername() + ". Command packet: " + packet);
-      player.disconnect(Component.text(
-          "A proxy plugin caused an illegal protocol state. "
-              + "Contact your network administrator."));
+      player.disconnect(KeyedChatHandler.ILLEGAL_PROTOCOL_STATE);
       return null;
     }
     // An unsigned command with a 'last seen' update will not happen as of 1.20.5+,
@@ -85,9 +83,7 @@ public class SessionCommandHandler extends RateLimitedCommandHandler<SessionPlay
       logger.fatal("A plugin tried to change a command with signed component(s). "
           + "This is not supported. "
           + "Disconnecting player " + player.getUsername() + ". Command packet: " + packet);
-      player.disconnect(Component.text(
-          "A proxy plugin caused an illegal protocol state. "
-              + "Contact your network administrator."));
+      player.disconnect(KeyedChatHandler.ILLEGAL_PROTOCOL_STATE);
       return null;
     }
 

@@ -1,4 +1,3 @@
-#Wiki: https://docs.papermc.io/velocity/configuration
 config-version = "cv-2.9"
 
 bind = "127.0.0.1:25565"

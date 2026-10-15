@@ -25,7 +25,6 @@ import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.RateLimitedCommandHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.builder.ChatBuilderV2;
 import java.util.concurrent.CompletableFuture;
-import net.kyori.adventure.text.Component;
 
 public class KeyedCommandHandler extends RateLimitedCommandHandler<KeyedPlayerCommandPacket> {
 
@@ -54,9 +53,7 @@ public class KeyedCommandHandler extends RateLimitedCommandHandler<KeyedPlayerCo
             logger.fatal("A plugin tried to deny a command with signable component(s). "
                 + "This is not supported. "
                 + "Disconnecting player " + player.getUsername() + ". Command packet: " + packet);
-            player.disconnect(Component.text(
-                "A proxy plugin caused an illegal protocol state. "
-                    + "Contact your network administrator."));
+            player.disconnect(KeyedChatHandler.ILLEGAL_PROTOCOL_STATE);
           }
         }
         return CompletableFuture.completedFuture(null);
@@ -77,9 +74,7 @@ public class KeyedCommandHandler extends RateLimitedCommandHandler<KeyedPlayerCo
             logger.fatal("A plugin tried to change a command with signed component(s). "
                 + "This is not supported. "
                 + "Disconnecting player " + player.getUsername() + ". Command packet: " + packet);
-            player.disconnect(Component.text(
-                "A proxy plugin caused an illegal protocol state. "
-                    + "Contact your network administrator."));
+            player.disconnect(KeyedChatHandler.ILLEGAL_PROTOCOL_STATE);
             return CompletableFuture.completedFuture(null);
           }
           write.message("/" + commandToRun);
@@ -97,9 +92,7 @@ public class KeyedCommandHandler extends RateLimitedCommandHandler<KeyedPlayerCo
             logger.fatal("A plugin tried to change a command with signed component(s). "
                 + "This is not supported. "
                 + "Disconnecting player " + player.getUsername() + ". Command packet: " + packet);
-            player.disconnect(Component.text(
-                "A proxy plugin caused an illegal protocol state. "
-                    + "Contact your network administrator."));
+            player.disconnect(KeyedChatHandler.ILLEGAL_PROTOCOL_STATE);
             return null;
           }
 

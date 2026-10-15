@@ -113,6 +113,9 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   public static final String VELOCITY_URL = "https://papermc.io/software/velocity";
 
   private static final Logger logger = LogManager.getLogger(VelocityServer.class);
+  private static final Component FALLBACK_SERVER_NOT_FOUND = Component.translatable(
+      "velocity.error.fallback-server-not-found",
+      "Your server has been changed, but we could not move you to any fallback servers.");
   public static final Gson GENERAL_GSON = new GsonBuilder()
       .registerTypeHierarchyAdapter(Favicon.class, FaviconSerializer.INSTANCE)
       .registerTypeHierarchyAdapter(GameProfile.class, GameProfileSerializer.INSTANCE)
@@ -485,15 +488,13 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
           player.createConnectionRequest(next.get()).connectWithIndication()
               .whenComplete((success, ex) -> {
                 if (ex != null || success == null || !success) {
-                  player.disconnect(Component.text("Your server has been changed, but we could "
-                      + "not move you to any fallback servers."));
+                  player.disconnect(FALLBACK_SERVER_NOT_FOUND);
                 }
                 latch.countDown();
               });
         } else {
           latch.countDown();
-          player.disconnect(Component.text("Your server has been changed, but we could "
-              + "not move you to any fallback servers."));
+          player.disconnect(FALLBACK_SERVER_NOT_FOUND);
         }
       }
       try {
@@ -612,7 +613,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
    * @param explicitExit whether the user explicitly shut down the proxy
    */
   public void shutdown(boolean explicitExit) {
-    shutdown(explicitExit, Component.translatable("velocity.kick.shutdown"));
+    shutdown(explicitExit, Component.translatable("velocity.kick.shutdown", "Proxy shutting down."));
   }
 
   @Override
