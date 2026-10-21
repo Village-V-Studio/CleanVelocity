@@ -1,23 +1,33 @@
 # CleanVelocity
 
-**CleanVelocity** is a stripped-down and optimized fork of Velocity, with many unnecessary features, configuration options, and commands removed for maximum stability and simplicity. The main goal is to remove all optional built-in functionality so that the proxy can be fully customized through plugins based on your specific needs.
+**CleanVelocity** is an extremely stripped-down, bare-bones, and performance-focused fork of Velocity. It intentionally strips away non-essential built-in mechanics, configuration bloat, and default protections to provide a pure, lightweight networking proxy.
 
-Original [Velocity](https://github.com/PaperMC/Velocity) by [PaperMC](https://papermc.io). Velocity is licensed under the GPLv3 license.
+The core philosophy of CleanVelocity is to serve as a **clean slate**: a minimal foundation designed for developers and server networks to implement their own security, moderation, and routing features entirely through plugins or custom code modifications, without the proxy getting in the way.
 
-**You can use [CleanPaper](https://github.com/Village-V-Studio/CleanPaper) as a backend server for your CleanVelocity.**
+Original [Velocity](https://github.com/PaperMC/Velocity) by [PaperMC](https://papermc.io). Licensed under the GPLv3 license.
+
+> [!WARNING]
+> ### Security & Protection Notice
+> CleanVelocity does **not** provide built-in anti-spam, packet limiting, command rate-limiting, or chat filtering. All internal throttle checks and packet validations have been intentionally removed for maximum raw throughput.
+> 
+> If you deploy CleanVelocity on a public network, **you are responsible for implementing your own security layer** (e.g. external firewall/anti-DDoS mitigation, reverse proxy protection, or dedicated security plugins).
 
 ## What was changed / removed:
 
-- Removed bStats analytics;
-- Removed `lang` folder (you can still create this folder manually to load custom translation files);
-- Connection and timeout settings: `login-ratelimit`, `connection-timeout`, `read-timeout`, `try = ["server"]`;
-- Display settings: `motd`, `show-max-players`;
-- Anti-spam settings: `command-rate-limit`, `forward-commands-if-rate-limited`, `kick-after-rate-limited-commands`, `tab-complete-rate-limit`, `kick-after-rate-limited-tab-completes`;
-- Specific features and logging: `kick-existing-players`, `sample-players-in-ping`, `log-player-connections`, `enable-player-address-logging`, `announce-forge`, `forwarding-secret-file`;
-- Other system settings: `bungee-plugin-message-channel`, `show-ping-requests`, `failover-on-unexpected-server-disconnect`, `announce-proxy-commands`, `log-command-executions`, `prevent-client-proxy-connections`;
-- Removed the `[query]`, `[forced-hosts]`, `[packet-limiter]` and `[ping-passthrough]` systems;
-- Removed all built-in commands. Only `/server reload|stop` remains;
-- And some other minor changes.
+- **Security & Validation:**
+  - Removed chat packet validation and illegal character checks;
+  - Removed anti-spam & rate-limits: `command-rate-limit`, `forward-commands-if-rate-limited`, `kick-after-rate-limited-commands`, `tab-complete-rate-limit`, `kick-after-rate-limited-tab-completes`;
+  - Removed `[packet-limiter]` and connection rate limits (`login-ratelimit`);
+- **Networking & Systems:**
+  - Removed `[query]`, `[forced-hosts]`, and `[ping-passthrough]` systems;
+  - Connection & fallback tweaks: `connection-timeout`, `read-timeout`, `try = ["server"]`, `failover-on-unexpected-server-disconnect`;
+  - Removed `bungee-plugin-message-channel` and `prevent-client-proxy-connections`;
+- **Commands & Configuration:**
+  - Removed legacy Configurate 3 compatibility module (Sponge Configurate 3 for outdated plugins);
+  - Removed all built-in commands except `/server reload|stop`;
+  - Display settings removed: `motd`, `show-max-players`, `sample-players-in-ping`;
+  - Removed bStats analytics and automatic creation of the `lang` and `plugins` folders;
+  - Removed verbose address and command execution logging;
 
 ## Download & Running
 
