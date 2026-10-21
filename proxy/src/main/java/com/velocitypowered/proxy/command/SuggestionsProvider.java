@@ -30,7 +30,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.spotify.futures.CompletableFutures;
 import com.velocitypowered.api.command.Command;
 import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.CommandSource;
@@ -357,7 +356,7 @@ final class SuggestionsProvider<S> {
       final List<Suggestions> suggestions = new ArrayList<>(futures.length);
       for (final CompletableFuture<Suggestions> future : futures) {
         if (future.isCompletedExceptionally()) {
-          final Throwable exception = CompletableFutures.getException(future);
+          final Throwable exception = future.exceptionNow();
           LOGGER.error("Node cannot provide suggestions", exception);
         } else {
           suggestions.add(future.join());
