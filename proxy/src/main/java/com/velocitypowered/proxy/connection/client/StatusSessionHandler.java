@@ -23,8 +23,6 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.MinecraftConnection;
 import com.velocitypowered.proxy.connection.MinecraftSessionHandler;
 import com.velocitypowered.proxy.connection.util.VelocityInboundConnection;
-import com.velocitypowered.proxy.protocol.packet.LegacyDisconnect;
-import com.velocitypowered.proxy.protocol.packet.LegacyPingPacket;
 import com.velocitypowered.proxy.protocol.packet.StatusPingPacket;
 import com.velocitypowered.proxy.protocol.packet.StatusRequestPacket;
 import com.velocitypowered.proxy.protocol.packet.StatusResponsePacket;
@@ -56,28 +54,6 @@ public class StatusSessionHandler implements MinecraftSessionHandler {
   @Override
   public void activated() {
 
-  }
-
-  @Override
-  public boolean handle(LegacyPingPacket packet) {
-    if (this.pingReceived) {
-      throw EXPECTED_AWAITING_REQUEST;
-    }
-    this.pingReceived = true;
-    server.getServerListPingHandler().getInitialPing(this.inbound)
-        .thenCompose(ping -> server.getEventManager().fire(new ProxyPingEvent(inbound, ping)))
-        .thenAcceptAsync(event -> {
-          if (event.getResult().isAllowed()) {
-            connection.closeWith(LegacyDisconnect.fromServerPing(event.getPing(), packet.getVersion()));
-          } else {
-            connection.close();
-          }
-        }, connection.eventLoop())
-        .exceptionally((ex) -> {
-          logger.error("Exception while handling legacy ping {}", packet, ex);
-          return null;
-        });
-    return true;
   }
 
   @Override

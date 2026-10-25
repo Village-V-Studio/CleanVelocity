@@ -22,7 +22,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.velocitypowered.api.event.connection.ConnectionHandshakeEvent;
 import com.velocitypowered.api.network.HandshakeIntent;
-import com.velocitypowered.api.network.ProtocolState;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.config.PlayerInfoForwarding;
@@ -33,20 +32,13 @@ import com.velocitypowered.proxy.connection.MinecraftSessionHandler;
 import com.velocitypowered.proxy.connection.forge.legacy.LegacyForgeConstants;
 import com.velocitypowered.proxy.connection.forge.modern.ModernForgeConnectionType;
 import com.velocitypowered.proxy.connection.forge.modern.ModernForgeConstants;
-import com.velocitypowered.proxy.connection.util.VelocityInboundConnection;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.StateRegistry;
 import com.velocitypowered.proxy.protocol.packet.HandshakePacket;
-import com.velocitypowered.proxy.protocol.packet.LegacyDisconnect;
-import com.velocitypowered.proxy.protocol.packet.LegacyHandshakePacket;
-import com.velocitypowered.proxy.protocol.packet.LegacyPingPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.concurrent.ScheduledFuture;
-import java.net.InetSocketAddress;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -61,8 +53,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class HandshakeSessionHandler implements MinecraftSessionHandler {
 
   private static final Logger LOGGER = LogManager.getLogger(HandshakeSessionHandler.class);
-  private static final long LOGIN_TIMEOUT_MILLIS =
-      Long.getLong("velocity.login-timeout", 30_000);
+  private static final long LOGIN_TIMEOUT_MILLIS = Long.getLong("velocity.login-timeout", 30_000);
 
   private final MinecraftConnection connection;
   private final VelocityServer server;
@@ -70,24 +61,6 @@ public class HandshakeSessionHandler implements MinecraftSessionHandler {
   public HandshakeSessionHandler(MinecraftConnection connection, VelocityServer server) {
     this.connection = Preconditions.checkNotNull(connection, "connection");
     this.server = Preconditions.checkNotNull(server, "server");
-  }
-
-  @Override
-  public boolean handle(LegacyPingPacket packet) {
-    connection.setProtocolVersion(ProtocolVersion.LEGACY);
-    final StatusSessionHandler handler = new StatusSessionHandler(server,
-        new LegacyInboundConnection(connection, packet));
-    connection.setActiveSessionHandler(StateRegistry.STATUS, handler);
-    handler.handle(packet);
-    return true;
-  }
-
-  @Override
-  public boolean handle(LegacyHandshakePacket packet) {
-    connection.closeWith(LegacyDisconnect.from(Component.text(
-        "Your client is extremely old. Please update to a newer version of Minecraft.",
-        NamedTextColor.RED)));
-    return true;
   }
 
   @Override
@@ -135,8 +108,7 @@ public class HandshakeSessionHandler implements MinecraftSessionHandler {
       connection.setState(StateRegistry.LOGIN);
       ic.disconnectQuietly(Component.translatable(
           "multiplayer.disconnect.outdated_client",
-          Component.text(ProtocolVersion.SUPPORTED_VERSION_STRING)
-      ));
+          Component.text(ProtocolVersion.SUPPORTED_VERSION_STRING)));
       return;
     }
 
@@ -239,55 +211,5 @@ public class HandshakeSessionHandler implements MinecraftSessionHandler {
   @Override
   public String toString() {
     return "[initial connection] " + this.connection.getRemoteAddress();
-  }
-
-  private record LegacyInboundConnection(
-      MinecraftConnection connection,
-      LegacyPingPacket ping) implements VelocityInboundConnection {
-
-    @Override
-    public InetSocketAddress getRemoteAddress() {
-      return (InetSocketAddress) connection.getRemoteAddress();
-    }
-
-    @Override
-    public Optional<InetSocketAddress> getVirtualHost() {
-      return Optional.ofNullable(ping.getVhost());
-    }
-
-    @Override
-    public Optional<String> getRawVirtualHost() {
-      return getVirtualHost().map(InetSocketAddress::getHostName);
-    }
-
-    @Override
-    public boolean isActive() {
-      return !connection.isClosed();
-    }
-
-    @Override
-    public ProtocolVersion getProtocolVersion() {
-      return ProtocolVersion.LEGACY;
-    }
-
-    @Override
-    public String toString() {
-      return "[legacy connection] " + this.getRemoteAddress();
-    }
-
-    @Override
-    public MinecraftConnection getConnection() {
-      return connection;
-    }
-
-    @Override
-    public ProtocolState getProtocolState() {
-      return connection.getState().toProtocolState();
-    }
-
-    @Override
-    public HandshakeIntent getHandshakeIntent() {
-      return HandshakeIntent.STATUS;
-    }
   }
 }

@@ -116,7 +116,8 @@ public class MinecraftConnection extends ChannelInboundHandlerAdapter {
    *
    * @param channel   the channel on the connection
    * @param server    the Velocity instance
-   * @param sessionId the proxy session id of the player this connection belongs to, or
+   * @param sessionId the proxy session id of the player this connection belongs
+   *                  to, or
    *                  {@code null} if it does not belong to a player session
    */
   public MinecraftConnection(Channel channel, VelocityServer server, @Nullable UUID sessionId) {
@@ -401,7 +402,6 @@ public class MinecraftConnection extends ChannelInboundHandlerAdapter {
     if (frameDecoder != null) {
       frameDecoder.setState(state);
     }
-    // If the connection is LEGACY (<1.6), the decoder and encoder are not set.
     final MinecraftEncoder minecraftEncoder = this.channel.pipeline()
         .get(MinecraftEncoder.class);
     if (minecraftEncoder != null) {
@@ -441,8 +441,8 @@ public class MinecraftConnection extends ChannelInboundHandlerAdapter {
 
     if (this.channel.pipeline().get(Connections.PLAY_PACKET_QUEUE_INBOUND) == null) {
       this.channel.pipeline().addAfter(Connections.MINECRAFT_DECODER, Connections.PLAY_PACKET_QUEUE_INBOUND,
-           new PlayPacketQueueInboundHandler(this.protocolVersion,
-               channel.pipeline().get(MinecraftDecoder.class).getDirection()));
+          new PlayPacketQueueInboundHandler(this.protocolVersion,
+              channel.pipeline().get(MinecraftDecoder.class).getDirection()));
     }
   }
 
@@ -452,8 +452,8 @@ public class MinecraftConnection extends ChannelInboundHandlerAdapter {
   public void addPlayPacketQueueOutboundHandler() {
     if (this.channel.pipeline().get(Connections.PLAY_PACKET_QUEUE_OUTBOUND) == null) {
       this.channel.pipeline().addAfter(Connections.MINECRAFT_ENCODER, Connections.PLAY_PACKET_QUEUE_OUTBOUND,
-           new PlayPacketQueueOutboundHandler(this.protocolVersion,
-               channel.pipeline().get(MinecraftEncoder.class).getDirection()));
+          new PlayPacketQueueOutboundHandler(this.protocolVersion,
+              channel.pipeline().get(MinecraftEncoder.class).getDirection()));
     }
   }
 
@@ -476,14 +476,8 @@ public class MinecraftConnection extends ChannelInboundHandlerAdapter {
     if (frameDecoder != null) {
       frameDecoder.setProtocolVersion(protocolVersion);
     }
-    if (protocolVersion != ProtocolVersion.LEGACY) {
-      this.channel.pipeline().get(MinecraftEncoder.class).setProtocolVersion(protocolVersion);
-      this.channel.pipeline().get(MinecraftDecoder.class).setProtocolVersion(protocolVersion);
-    } else {
-      // Legacy handshake handling
-      this.channel.pipeline().remove(MINECRAFT_ENCODER);
-      this.channel.pipeline().remove(MINECRAFT_DECODER);
-    }
+    this.channel.pipeline().get(MinecraftEncoder.class).setProtocolVersion(protocolVersion);
+    this.channel.pipeline().get(MinecraftDecoder.class).setProtocolVersion(protocolVersion);
 
     if (changed) {
       channel.pipeline().fireUserEventTriggered(VelocityConnectionEvent.PROTOCOL_VERSION_CHANGED);
