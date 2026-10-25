@@ -5,6 +5,10 @@ apply<SpotlessPlugin>()
 
 extensions.configure<SpotlessExtension> {
     java {
+        target(fileTree(project.projectDir) {
+            include("**/*.java")
+            exclude("**/build/**")
+        })
         if (project.name == "velocity-api") {
             licenseHeaderFile(file("HEADER.txt"))
             targetExclude("**/java/com/velocitypowered/api/util/Ordered.java")

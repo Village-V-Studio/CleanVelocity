@@ -104,7 +104,7 @@ public class AuthSessionHandler implements MinecraftSessionHandler {
       this.connectedPlayer = player;
       if (!server.canRegisterConnection(player)) {
         player.disconnect0(
-            Component.translatable("velocity.error.already-connected-proxy", NamedTextColor.RED),
+            Component.translatable("proxy.error.already-connected-proxy", NamedTextColor.RED),
             true);
         return CompletableFuture.completedFuture(null);
       }
@@ -232,7 +232,7 @@ public class AuthSessionHandler implements MinecraftSessionHandler {
         player.disconnect0(reason.get(), true);
       } else {
         if (!server.registerConnection(player)) {
-          player.disconnect0(Component.translatable("velocity.error.already-connected-proxy"), true);
+          player.disconnect0(Component.translatable("proxy.error.already-connected-proxy"), true);
           return;
         }
 
@@ -271,7 +271,7 @@ public class AuthSessionHandler implements MinecraftSessionHandler {
       Optional<RegisteredServer> toTry = event.getInitialServer();
       if (toTry.isEmpty()) {
         player.disconnect0(
-            Component.translatable("velocity.error.no-available-servers", NamedTextColor.RED),
+            Component.translatable("proxy.error.no-available-servers", NamedTextColor.RED),
             true);
         return;
       }

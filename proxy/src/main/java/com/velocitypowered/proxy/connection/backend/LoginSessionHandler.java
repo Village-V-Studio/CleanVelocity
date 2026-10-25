@@ -57,7 +57,7 @@ import net.kyori.adventure.text.Component;
 public class LoginSessionHandler implements MinecraftSessionHandler {
 
   private static final Component MODERN_IP_FORWARDING_FAILURE = Component
-      .translatable("velocity.error.modern-forwarding-failed");
+      .translatable("proxy.error.modern-forwarding-failed");
 
   private final VelocityServer server;
   private final VelocityServerConnection serverConn;

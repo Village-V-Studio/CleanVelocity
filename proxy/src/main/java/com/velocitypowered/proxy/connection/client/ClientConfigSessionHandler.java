@@ -268,7 +268,7 @@ public class ClientConfigSessionHandler implements MinecraftSessionHandler {
 
   @Override
   public void exception(Throwable throwable) {
-    player.disconnect(Component.translatable("velocity.error.player-connection-error", NamedTextColor.RED));
+    player.disconnect(Component.translatable("proxy.error.player-connection-error", NamedTextColor.RED));
     if (MinecraftDecoder.DEBUG) {
       logger.info("Exception while handling packet for {}", player, throwable);
     }

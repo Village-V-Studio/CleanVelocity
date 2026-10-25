@@ -705,12 +705,12 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
 
     Component friendlyError;
     if (connectedServer != null && connectedServer.getServerInfo().equals(server.getServerInfo())) {
-      friendlyError = Component.translatable("velocity.error.connected-server-error",
+      friendlyError = Component.translatable("proxy.error.connected-server-error",
           Argument.string("server", server.getServerInfo().getName()));
     } else {
       logger.error("{}: unable to connect to server {}", this, server.getServerInfo().getName(),
           wrapped);
-      friendlyError = Component.translatable("velocity.error.connecting-server-error",
+      friendlyError = Component.translatable("proxy.error.connecting-server-error",
           Argument.string("server", server.getServerInfo().getName()));
     }
     handleConnectionException(server, null, friendlyError.color(NamedTextColor.RED), safe);
@@ -737,7 +737,7 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
       logger.info("{}: kicked from server {}: {}", this, server.getServerInfo().getName(),
           plainTextReason);
       handleConnectionException(server, disconnectReason,
-          Component.translatable("velocity.error.moved-to-new-server", NamedTextColor.RED,
+          Component.translatable("proxy.error.moved-to-new-server", NamedTextColor.RED,
               Argument.string("server", server.getServerInfo().getName()),
               disconnectReason),
           safe);
@@ -745,7 +745,7 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
       logger.error("{}: disconnected while connecting to {}: {}", this,
           server.getServerInfo().getName(), plainTextReason);
       handleConnectionException(server, disconnectReason,
-          Component.translatable("velocity.error.cant-connect", NamedTextColor.RED,
+          Component.translatable("proxy.error.cant-connect", NamedTextColor.RED,
               Argument.string("server", server.getServerInfo().getName()),
               disconnectReason),
           safe);

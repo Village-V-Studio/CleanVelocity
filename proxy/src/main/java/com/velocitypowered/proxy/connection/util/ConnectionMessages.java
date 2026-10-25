@@ -28,11 +28,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class ConnectionMessages {
 
   public static final TranslatableComponent ALREADY_CONNECTED = Component
-      .translatable("velocity.error.already-connected", NamedTextColor.RED);
+      .translatable("proxy.error.already-connected", NamedTextColor.RED);
   public static final TranslatableComponent IN_PROGRESS = Component
-      .translatable("velocity.error.already-connecting", NamedTextColor.RED);
+      .translatable("proxy.error.already-connecting", NamedTextColor.RED);
   public static final TranslatableComponent INTERNAL_SERVER_CONNECTION_ERROR = Component
-      .translatable("velocity.error.internal-server-connection-error", NamedTextColor.RED);
+      .translatable("proxy.error.internal-server-connection-error", NamedTextColor.RED);
 
   private ConnectionMessages() {
     throw new AssertionError();

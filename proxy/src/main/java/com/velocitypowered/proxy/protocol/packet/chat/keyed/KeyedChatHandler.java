@@ -50,8 +50,7 @@ public class KeyedChatHandler implements ChatHandler<KeyedPlayerChatPacket> {
   }
 
   public static final Component ILLEGAL_PROTOCOL_STATE = Component.translatable(
-      "velocity.error.plugin-illegal-protocol-state",
-      "A proxy plugin caused an illegal protocol state. Contact your network administrator."
+      "proxy.error.plugin-illegal-protocol-state"
   );
 
   public static void invalidCancel(Logger logger, ConnectedPlayer player) {

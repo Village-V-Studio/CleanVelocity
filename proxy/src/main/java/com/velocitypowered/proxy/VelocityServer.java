@@ -42,6 +42,7 @@ import com.velocitypowered.api.util.GameProfile;
 import com.velocitypowered.api.util.ProxyVersion;
 import com.velocitypowered.proxy.command.VelocityCommandManager;
 import com.velocitypowered.proxy.command.builtin.VelocityCommand;
+import com.velocitypowered.proxy.config.DefaultMessages;
 import com.velocitypowered.proxy.config.VelocityConfiguration;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.connection.player.resourcepack.VelocityResourcePackInfo;
@@ -68,19 +69,23 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,8 +119,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
 
   private static final Logger logger = LogManager.getLogger(VelocityServer.class);
   private static final Component FALLBACK_SERVER_NOT_FOUND = Component.translatable(
-      "velocity.error.fallback-server-not-found",
-      "Your server has been changed, but we could not move you to any fallback servers.");
+      "proxy.error.fallback-server-not-found");
   public static final Gson GENERAL_GSON = new GsonBuilder()
       .registerTypeHierarchyAdapter(Favicon.class, FaviconSerializer.INSTANCE)
       .registerTypeHierarchyAdapter(GameProfile.class, GameProfileSerializer.INSTANCE)
@@ -302,51 +306,104 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
         .create(Key.key("velocity", "translations"));
     translationRegistry.defaultLocale(Locale.US);
 
+    final Map<Locale, Map<String, String>> translationsByLocale = new HashMap<>();
+
+    // 1. Hardcoded code defaults: registered first so every key has a guaranteed fallback
+    final Map<String, String> defaultMap = translationsByLocale.computeIfAbsent(
+        Locale.US, k -> new HashMap<>());
+    defaultMap.putAll(DefaultMessages.getDefaults());
+
+    // 2. Embedded translations inside the JAR (lang/*.properties)
+    try {
+      ResourceUtils.visitResources(VelocityServer.class, path -> {
+        try (final Stream<Path> files = Files.walk(path)) {
+          files.filter(Files::isRegularFile)
+              .filter(file -> file.getFileName().toString().endsWith(".properties"))
+              .forEach(file -> {
+                loadPropertiesIntoMap(translationsByLocale, file);
+              });
+        } catch (IOException e) {
+          logger.error("Encountered an I/O error whilst loading embedded translations", e);
+        }
+      }, "lang");
+    } catch (Exception e) {
+      logger.warn("Could not load embedded translations from JAR: {}", e.getMessage());
+    }
+
+    // 3. User translations from the optional "lang" directory (overrides and supplements defaults)
     final Path langPath = Path.of("lang");
     if (Files.exists(langPath) && Files.isDirectory(langPath)) {
-      // If the user has created a lang folder, load from it ONLY
       try (final Stream<Path> files = Files.walk(langPath)) {
-        files.filter(Files::isRegularFile).forEach(file -> {
-          loadPropertiesIntoStore(translationRegistry, file);
-        });
-      } catch (IOException e) {
-        logger.error("Encountered an I/O error whilst loading user translations", e);
-      }
-    } else {
-      // Load default translations from the JAR's embedded resources ONLY IF lang folder is missing
-      try {
-        ResourceUtils.visitResources(VelocityServer.class, path -> {
-          try (final Stream<Path> files = Files.walk(path)) {
-            files.filter(Files::isRegularFile).forEach(file -> {
-              loadPropertiesIntoStore(translationRegistry, file);
+        files.filter(Files::isRegularFile)
+            .filter(file -> file.getFileName().toString().endsWith(".properties"))
+            .forEach(file -> {
+              loadPropertiesIntoMap(translationsByLocale, file);
             });
-          } catch (IOException e) {
-            logger.error("Encountered an I/O error whilst loading translations", e);
-          }
-        }, "com", "velocitypowered", "proxy", "l10n");
       } catch (IOException e) {
-        logger.error("Encountered an I/O error whilst loading translations", e);
+        logger.error("Encountered an I/O error whilst loading user translations from lang/", e);
+      }
+    }
+
+    // 4. Register all merged translations into the Adventure translation store
+    for (final Map.Entry<Locale, Map<String, String>> entry : translationsByLocale.entrySet()) {
+      final Locale locale = entry.getKey();
+      try {
+        translationRegistry.registerAll(locale, entry.getValue());
+        ClosestLocaleMatcher.INSTANCE.registerKnown(locale);
+      } catch (Exception e) {
+        logger.warn("Could not register translations for locale {}: {}", locale, e.getMessage());
       }
     }
 
     GlobalTranslator.translator().addSource(translationRegistry);
   }
 
-  private void loadPropertiesIntoStore(MiniMessageTranslationStore store, Path file) {
+  private static Locale parseLocaleFromFilename(String filename) {
+    String tag = filename;
+    if (tag.startsWith("messages_")) {
+      tag = tag.substring("messages_".length());
+    } else if (tag.startsWith("messages-")) {
+      tag = tag.substring("messages-".length());
+    } else if (tag.equals("messages")) {
+      return Locale.US;
+    }
+    tag = tag.trim();
+    if (tag.isEmpty()) {
+      return Locale.US;
+    }
+
+    Locale bcp47 = Locale.forLanguageTag(tag.replace('_', '-'));
+    if (!bcp47.getLanguage().isEmpty()) {
+      return bcp47;
+    }
+
+    String[] parts = tag.split("[_-]");
+    if (parts.length == 1) {
+      return Locale.of(parts[0]);
+    } else if (parts.length == 2) {
+      return Locale.of(parts[0], parts[1]);
+    } else {
+      return Locale.of(parts[0], parts[1], parts[2]);
+    }
+  }
+
+  private void loadPropertiesIntoMap(Map<Locale, Map<String, String>> translationsByLocale, Path file) {
     final String filename = com.google.common.io.Files
         .getNameWithoutExtension(file.getFileName().toString());
-    final String localeName = filename.replace("messages_", "")
-        .replace("messages", "")
-        .replace('_', '-');
-    final Locale locale = localeName.isBlank()
-        ? Locale.US
-        : Locale.forLanguageTag(localeName);
+    final Locale locale = parseLocaleFromFilename(filename);
 
-    try {
-      store.registerAll(locale, file, false);
-      ClosestLocaleMatcher.INSTANCE.registerKnown(locale);
+    final Properties properties = new Properties();
+    try (final BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+      properties.load(reader);
     } catch (Exception e) {
-      logger.warn("Could not load translation file {} for locale {}: {}", file, locale, e.getMessage());
+      logger.warn("Could not read translation file {}: {}", file, e.getMessage());
+      return;
+    }
+
+    final Map<String, String> targetMap = translationsByLocale.computeIfAbsent(
+        locale, k -> new HashMap<>());
+    for (final String name : properties.stringPropertyNames()) {
+      targetMap.put(name, properties.getProperty(name));
     }
   }
 
@@ -614,7 +671,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
    * @param explicitExit whether the user explicitly shut down the proxy
    */
   public void shutdown(boolean explicitExit) {
-    shutdown(explicitExit, Component.translatable("velocity.kick.shutdown", "Proxy shutting down."));
+    shutdown(explicitExit, Component.translatable("proxy.kick.shutdown"));
   }
 
   @Override

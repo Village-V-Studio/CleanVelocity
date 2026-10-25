@@ -45,7 +45,7 @@ public class ServerListPingHandler {
     List<ServerPing.SamplePlayer> samplePlayers = ImmutableList.of();
     return new ServerPing(
         new ServerPing.Version(version.getProtocol(),
-            "Velocity " + ProtocolVersion.SUPPORTED_VERSION_STRING),
+            "Minecraft " + ProtocolVersion.SUPPORTED_VERSION_STRING),
         new ServerPing.Players(server.getPlayerCount(), configuration.getShowMaxPlayers(),
             samplePlayers),
         configuration.getMotd(),

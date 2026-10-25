@@ -92,18 +92,13 @@ public final class VelocityCommand {
       final CommandSource source = context.getSource();
       try {
         if (server.reloadConfiguration()) {
-          source.sendMessage(Component.translatable("velocity.command.reload-success",
-              "CleanVelocity configuration successfully reloaded.", NamedTextColor.GREEN));
+          source.sendMessage(Component.translatable("proxy.command.reload-success", NamedTextColor.GREEN));
         } else {
-          source.sendMessage(Component.translatable("velocity.command.reload-failure",
-              "Unable to reload your CleanVelocity configuration. Check the console for more details.",
-              NamedTextColor.RED));
+          source.sendMessage(Component.translatable("proxy.command.reload-failure", NamedTextColor.RED));
         }
       } catch (Exception e) {
         logger.error("Unable to reload configuration", e);
-        source.sendMessage(Component.translatable("velocity.command.reload-failure",
-            "Unable to reload your CleanVelocity configuration. Check the console for more details.",
-            NamedTextColor.RED));
+        source.sendMessage(Component.translatable("proxy.command.reload-failure", NamedTextColor.RED));
       }
       return Command.SINGLE_SUCCESS;
     }

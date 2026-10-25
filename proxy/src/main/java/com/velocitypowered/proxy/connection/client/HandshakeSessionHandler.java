@@ -151,7 +151,7 @@ public class HandshakeSessionHandler implements MinecraftSessionHandler {
       // disconnect packet.
       connection.setState(StateRegistry.LOGIN);
       ic.disconnectQuietly(
-          Component.translatable("velocity.error.modern-forwarding-needs-new-client"));
+          Component.translatable("proxy.error.modern-forwarding-needs-new-client"));
       return;
     }
 

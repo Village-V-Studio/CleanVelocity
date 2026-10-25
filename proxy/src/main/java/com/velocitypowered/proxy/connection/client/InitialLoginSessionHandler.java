@@ -249,7 +249,7 @@ public class InitialLoginSessionHandler implements MinecraftSessionHandler {
             } else if (response.statusCode() == 204) {
               // Apparently an offline-mode user logged onto this online-mode proxy.
               inbound.disconnect(
-                  Component.translatable("velocity.error.online-mode-only", NamedTextColor.RED));
+                  Component.translatable("proxy.error.online-mode-only", NamedTextColor.RED));
             } else {
               // Something else went wrong
               logger.error(

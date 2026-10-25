@@ -206,7 +206,7 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
       ReferenceCountUtil.release(packet);
       logger.warn("Disconnecting {}: pre-join plugin-message queue exceeded its limits "
               + "({} messages, {} bytes).", player, newCount, newBytes);
-      player.disconnect(Component.translatable("velocity.error.plugin-message-overflow"));
+      player.disconnect(Component.translatable("proxy.error.plugin-message-overflow"));
       return false;
     }
     loginPluginMessages.add(packet);
@@ -538,7 +538,7 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
 
   @Override
   public void exception(Throwable throwable) {
-    player.disconnect(Component.translatable("velocity.error.player-connection-error", NamedTextColor.RED));
+    player.disconnect(Component.translatable("proxy.error.player-connection-error", NamedTextColor.RED));
     if (MinecraftDecoder.DEBUG) {
       logger.info("Exception while handling packet for {}", player, throwable);
     }
