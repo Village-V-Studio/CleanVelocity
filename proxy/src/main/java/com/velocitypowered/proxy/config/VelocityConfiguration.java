@@ -27,12 +27,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.annotations.Expose;
 import com.velocitypowered.api.proxy.config.ProxyConfig;
 import com.velocitypowered.api.util.Favicon;
-import com.velocitypowered.proxy.config.migration.ConfigurationMigration;
-import com.velocitypowered.proxy.config.migration.ForwardingMigration;
-import com.velocitypowered.proxy.config.migration.KeyAuthenticationMigration;
-import com.velocitypowered.proxy.config.migration.MiniMessageTranslationsMigration;
-import com.velocitypowered.proxy.config.migration.SecretMigration;
-import com.velocitypowered.proxy.config.migration.TransferIntegrationMigration;
 import com.velocitypowered.proxy.util.AddressUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
@@ -277,7 +271,6 @@ public class VelocityConfiguration implements ProxyConfig {
     return advanced.isTcpFastOpen();
   }
 
-
   public boolean isAcceptTransfers() {
     return this.advanced.isAcceptTransfers();
   }
@@ -289,7 +282,6 @@ public class VelocityConfiguration implements ProxyConfig {
   public boolean isEnableReusePort() {
     return advanced.isEnableReusePort();
   }
-
 
   @Override
   public String toString() {
@@ -329,21 +321,6 @@ public class VelocityConfiguration implements ProxyConfig {
         .build()) {
       config.load();
 
-      final ConfigurationMigration[] migrations = {
-          new ForwardingMigration(),
-          new KeyAuthenticationMigration(),
-
-          new MiniMessageTranslationsMigration(),
-          new TransferIntegrationMigration(),
-          new SecretMigration()
-      };
-
-      for (final ConfigurationMigration migration : migrations) {
-        if (migration.shouldMigrate(config)) {
-          migration.migrate(config, logger);
-        }
-      }
-
       String forwardingSecretString = System.getenv().getOrDefault(
           "VELOCITY_FORWARDING_SECRET", "");
       if (forwardingSecretString.isBlank()) {
@@ -358,7 +335,6 @@ public class VelocityConfiguration implements ProxyConfig {
       final CommentedConfig serversConfig = config.get("servers");
       final PlayerInfoForwarding forwardingMode = config.getEnumOrElse(
           "player-info-forwarding-mode", PlayerInfoForwarding.NONE);
-
 
       final String bind = config.getOrElse("bind", "0.0.0.0:25565");
       final boolean onlineMode = config.getOrElse("online-mode", true);
@@ -380,8 +356,7 @@ public class VelocityConfiguration implements ProxyConfig {
           forwardingSecret,
           new Servers(serversConfig),
           new Advanced(config),
-          forceKeyAuthentication
-      );
+          forceKeyAuthentication);
     }
   }
 
