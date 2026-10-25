@@ -19,12 +19,12 @@
 package com.velocitypowered.proxy.plugin.virtual;
 
 /**
- * A singleton plugin object that represents the Velocity proxy itself.
+ * A singleton plugin object that represents the CleanVelocity proxy itself.
  */
-public class VelocityVirtualPlugin {
+public class CleanVelocityVirtualPlugin {
   @SuppressWarnings("InstantiationOfUtilityClass")
-  public static final VelocityVirtualPlugin INSTANCE = new VelocityVirtualPlugin();
+  public static final CleanVelocityVirtualPlugin INSTANCE = new CleanVelocityVirtualPlugin();
 
-  private VelocityVirtualPlugin() {
+  private CleanVelocityVirtualPlugin() {
   }
 }

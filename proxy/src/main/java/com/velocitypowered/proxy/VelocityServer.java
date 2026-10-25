@@ -54,7 +54,7 @@ import com.velocitypowered.proxy.network.ConnectionManager;
 import com.velocitypowered.proxy.plugin.VelocityPluginManager;
 import com.velocitypowered.proxy.plugin.loader.VelocityPluginContainer;
 import com.velocitypowered.proxy.plugin.loader.VelocityPluginDescription;
-import com.velocitypowered.proxy.plugin.virtual.VelocityVirtualPlugin;
+import com.velocitypowered.proxy.plugin.virtual.CleanVelocityVirtualPlugin;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.util.FaviconSerializer;
 import com.velocitypowered.proxy.protocol.util.GameProfileSerializer;
@@ -211,12 +211,12 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   private VelocityPluginContainer createVirtualPlugin() {
     ProxyVersion version = getVersion();
     PluginDescription description = new VelocityPluginDescription(
-        "velocity", version.getName(), version.getVersion(), "The Velocity proxy",
+        "cleanvelocity", version.getName(), version.getVersion(), "The CleanVelocity proxy",
         version.getName().equals("Velocity") ? VELOCITY_URL : null,
         ImmutableList.of(version.getVendor()), Collections.emptyList(),
-            Collections.emptyList(), null);
+        ImmutableList.of("velocity"), null);
     VelocityPluginContainer container = new VelocityPluginContainer(description);
-    container.setInstance(VelocityVirtualPlugin.INSTANCE);
+    container.setInstance(CleanVelocityVirtualPlugin.INSTANCE);
     return container;
   }
 
@@ -258,7 +258,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     final BrigadierCommand velocityParentCommand = VelocityCommand.create(this);
     commandManager.register(
         commandManager.metaBuilder(velocityParentCommand)
-            .plugin(VelocityVirtualPlugin.INSTANCE)
+            .plugin(CleanVelocityVirtualPlugin.INSTANCE)
             .build(),
         velocityParentCommand);
 

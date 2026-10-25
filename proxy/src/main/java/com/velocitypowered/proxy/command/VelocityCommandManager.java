@@ -45,7 +45,7 @@ import com.velocitypowered.proxy.command.registrar.CommandRegistrar;
 import com.velocitypowered.proxy.command.registrar.RawCommandRegistrar;
 import com.velocitypowered.proxy.command.registrar.SimpleCommandRegistrar;
 import com.velocitypowered.proxy.event.VelocityEventManager;
-import com.velocitypowered.proxy.plugin.virtual.VelocityVirtualPlugin;
+import com.velocitypowered.proxy.plugin.virtual.CleanVelocityVirtualPlugin;
 import io.netty.util.concurrent.FastThreadLocalThread;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -376,9 +376,9 @@ public class VelocityCommandManager implements CommandManager {
   private Executor getAsyncExecutor(ParseResults<CommandSource> parse) {
     Object registrant;
     if (parse.getContext().getCommand() instanceof VelocityBrigadierCommandWrapper vbcw) {
-      registrant = vbcw.registrant() == null ? VelocityVirtualPlugin.INSTANCE : vbcw.registrant();
+      registrant = vbcw.registrant() == null ? CleanVelocityVirtualPlugin.INSTANCE : vbcw.registrant();
     } else {
-      registrant = VelocityVirtualPlugin.INSTANCE;
+      registrant = CleanVelocityVirtualPlugin.INSTANCE;
     }
     return pluginManager.ensurePluginContainer(registrant).getExecutorService();
   }
@@ -387,7 +387,7 @@ public class VelocityCommandManager implements CommandManager {
     final Thread thread = Thread.currentThread();
     if (thread instanceof FastThreadLocalThread) {
       // we *never* want to block the Netty event loop, so use the async executor
-      return pluginManager.ensurePluginContainer(VelocityVirtualPlugin.INSTANCE).getExecutorService();
+      return pluginManager.ensurePluginContainer(CleanVelocityVirtualPlugin.INSTANCE).getExecutorService();
     } else {
       // it's some other thread that isn't a Netty event loop thread. direct execution
       // it is!

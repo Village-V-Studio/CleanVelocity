@@ -23,7 +23,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.PluginManager;
-import com.velocitypowered.proxy.plugin.virtual.VelocityVirtualPlugin;
+import com.velocitypowered.proxy.plugin.virtual.CleanVelocityVirtualPlugin;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
@@ -42,7 +42,7 @@ public class FakePluginManager implements PluginManager {
   private final PluginContainer containerA = new FakePluginContainer("a", PLUGIN_A);
   private final PluginContainer containerB = new FakePluginContainer("b", PLUGIN_B);
   private final PluginContainer containerVelocity = new FakePluginContainer("velocity",
-      VelocityVirtualPlugin.INSTANCE);
+      CleanVelocityVirtualPlugin.INSTANCE);
 
   private ExecutorService service = Executors.newCachedThreadPool(
       new ThreadFactoryBuilder().setNameFormat("Test Async Thread").setDaemon(true).build()
@@ -54,7 +54,7 @@ public class FakePluginManager implements PluginManager {
       return Optional.of(containerA);
     } else if (instance == PLUGIN_B) {
       return Optional.of(containerB);
-    } else if (instance == VelocityVirtualPlugin.INSTANCE) {
+    } else if (instance == CleanVelocityVirtualPlugin.INSTANCE) {
       return Optional.of(containerVelocity);
     } else {
       return Optional.empty();
