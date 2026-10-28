@@ -9,7 +9,7 @@ package com.velocitypowered.api.proxy;
 
 import com.velocitypowered.api.proxy.crypto.KeyIdentifiable;
 import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a connextion that is in the login phase. This is most useful in conjunction

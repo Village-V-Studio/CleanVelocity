@@ -54,9 +54,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Handles a connection from the proxy to some backend server.
@@ -73,7 +72,7 @@ public class VelocityServerConnection implements MinecraftConnectionAssociation,
   private boolean gracefulDisconnect = false;
   private BackendConnectionPhase connectionPhase = BackendConnectionPhases.UNKNOWN;
   private final Map<Long, Long> pendingPings = new HashMap<>();
-  private @MonotonicNonNull Integer entityId;
+  private @Nullable Integer entityId;
 
   /**
    * Initializes a new server connection.

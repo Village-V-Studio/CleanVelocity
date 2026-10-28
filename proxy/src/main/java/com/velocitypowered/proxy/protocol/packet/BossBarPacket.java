@@ -28,7 +28,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.Set;
 import java.util.UUID;
 import net.kyori.adventure.bossbar.BossBar;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class BossBarPacket implements MinecraftPacket {
 

@@ -25,7 +25,7 @@ import com.velocitypowered.proxy.plugin.loader.VelocityPluginDescription;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class JavaVelocityPluginDescriptionCandidate extends VelocityPluginDescription {
 

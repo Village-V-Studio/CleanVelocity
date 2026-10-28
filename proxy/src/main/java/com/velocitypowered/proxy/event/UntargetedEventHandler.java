@@ -22,7 +22,7 @@ import com.velocitypowered.api.event.AwaitingEventExecutor;
 import com.velocitypowered.api.event.Continuation;
 import com.velocitypowered.api.event.EventHandler;
 import com.velocitypowered.api.event.EventTask;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Core class for invoking event handlers registered by plugins.

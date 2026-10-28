@@ -30,7 +30,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.proxy.testutil.FakePluginManager;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -144,7 +144,7 @@ public class EventTest {
 
   static final class AlwaysSyncListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread thread;
     int result;
 
@@ -167,11 +167,11 @@ public class EventTest {
 
   static final class AlwaysAsyncListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread threadA;
-    @MonotonicNonNull
+    @Nullable
     Thread threadB;
-    @MonotonicNonNull
+    @Nullable
     Thread threadC;
     int result;
 
@@ -207,13 +207,13 @@ public class EventTest {
 
   static final class SometimesAsyncListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread threadA;
-    @MonotonicNonNull
+    @Nullable
     Thread threadB;
-    @MonotonicNonNull
+    @Nullable
     Thread threadC;
-    @MonotonicNonNull
+    @Nullable
     Thread threadD;
     int result;
 
@@ -251,11 +251,11 @@ public class EventTest {
 
   static final class ContinuationListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread threadA;
-    @MonotonicNonNull
+    @Nullable
     Thread threadB;
-    @MonotonicNonNull
+    @Nullable
     Thread threadC;
 
     final AtomicInteger value = new AtomicInteger();
@@ -296,11 +296,11 @@ public class EventTest {
 
   static final class ResumeContinuationImmediatelyListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread threadA;
-    @MonotonicNonNull
+    @Nullable
     Thread threadB;
-    @MonotonicNonNull
+    @Nullable
     Thread threadC;
     int result;
 
@@ -333,11 +333,11 @@ public class EventTest {
 
   static final class ContinuationParameterListener {
 
-    @MonotonicNonNull
+    @Nullable
     Thread threadA;
-    @MonotonicNonNull
+    @Nullable
     Thread threadB;
-    @MonotonicNonNull
+    @Nullable
     Thread threadC;
 
     final AtomicInteger result = new AtomicInteger();

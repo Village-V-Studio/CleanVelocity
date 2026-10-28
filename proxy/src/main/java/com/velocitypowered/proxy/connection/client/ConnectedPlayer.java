@@ -140,10 +140,9 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.Title.Times;
 import net.kyori.adventure.title.TitlePart;
 import net.kyori.adventure.translation.GlobalTranslator;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a player that is connected to the proxy.
@@ -193,7 +192,7 @@ public class ConnectedPlayer implements MinecraftConnectionAssociation, Player,
   private ClientConnectionPhase connectionPhase;
   private final Collection<ChannelIdentifier> clientsideChannels;
   private final CompletableFuture<Void> teardownFuture = new CompletableFuture<>();
-  private @MonotonicNonNull List<String> serversToTry = null;
+  private @Nullable List<String> serversToTry = null;
   private final ResourcePackHandler resourcePackHandler;
   private final BundleDelimiterHandler bundleHandler = new BundleDelimiterHandler(this);
 

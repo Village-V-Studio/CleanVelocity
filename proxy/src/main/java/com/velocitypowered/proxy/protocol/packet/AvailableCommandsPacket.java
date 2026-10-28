@@ -51,8 +51,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AvailableCommandsPacket implements MinecraftPacket {
 
@@ -69,7 +68,7 @@ public class AvailableCommandsPacket implements MinecraftPacket {
   private static final byte FLAG_HAS_SUGGESTIONS = 0x10;
   private static final byte FLAG_IS_RESTRICTED = 0x20;
 
-  private @MonotonicNonNull RootCommandNode<CommandSource> rootNode;
+  private @Nullable RootCommandNode<CommandSource> rootNode;
 
   /**
    * Returns the root node.
@@ -233,7 +232,7 @@ public class AvailableCommandsPacket implements MinecraftPacket {
     private final int[] children;
     private final int redirectTo;
     private final @Nullable ArgumentBuilder<CommandSource, ?> args;
-    private @MonotonicNonNull CommandNode<CommandSource> built;
+    private @Nullable CommandNode<CommandSource> built;
     private boolean validated;
 
     private WireNode(int idx, byte flags, int[] children, int redirectTo,

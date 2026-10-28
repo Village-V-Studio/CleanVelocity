@@ -9,7 +9,7 @@ package com.velocitypowered.api.permission;
 
 import java.util.Optional;
 import net.kyori.adventure.util.TriState;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents three different states of a setting.

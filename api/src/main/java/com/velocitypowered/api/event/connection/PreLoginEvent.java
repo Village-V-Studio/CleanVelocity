@@ -14,8 +14,8 @@ import com.velocitypowered.api.proxy.InboundConnection;
 import java.util.Optional;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This event is fired when a player has initiated a connection with the proxy but before the proxy

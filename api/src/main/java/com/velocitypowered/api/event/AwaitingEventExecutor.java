@@ -7,7 +7,7 @@
 
 package com.velocitypowered.api.event;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An event handler that returns an {@link EventTask} to await on.

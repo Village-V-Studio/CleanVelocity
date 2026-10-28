@@ -12,8 +12,7 @@ import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.annotation.AwaitingEvent;
 import com.velocitypowered.api.proxy.ServerConnection;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This event is fired when the downstream server tries to remove a resource pack from player
@@ -24,7 +23,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class ServerResourcePackRemoveEvent implements ResultedEvent<ResultedEvent.GenericResult> {
 
   private GenericResult result;
-  private final @MonotonicNonNull UUID packId;
+  private final @Nullable UUID packId;
   private final ServerConnection serverConnection;
 
   /**

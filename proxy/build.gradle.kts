@@ -42,7 +42,12 @@ tasks {
         transform(Log4j2PluginsCacheFileTransformer::class.java)
 
         // Exclude Checker Framework annotations
-        exclude("org/checkerframework/checker/**")
+        exclude("org/checkerframework/**")
+
+        // Exclude unused Netty codecs
+        exclude("io/netty/handler/codec/protobuf/**")
+        exclude("io/netty/handler/codec/marshalling/**")
+        exclude("io/netty/handler/codec/serialization/**")
     }
 
     runShadow {
@@ -71,9 +76,11 @@ dependencies {
 
     implementation(libs.bundles.log4j)
     implementation(libs.kyori.ansi)
-    implementation(libs.netty.codec)
+    implementation(libs.netty.codec) {
+        exclude(group = "io.netty", module = "netty-codec-protobuf")
+        exclude(group = "io.netty", module = "netty-codec-marshalling")
+    }
     implementation(libs.netty.codec.haproxy)
-    implementation(libs.netty.codec.http)
     implementation(libs.netty.handler)
     implementation(libs.netty.transport.native.epoll)
     implementation(variantOf(libs.netty.transport.native.epoll) { classifier("linux-x86_64") })
@@ -85,7 +92,6 @@ dependencies {
     implementation(variantOf(libs.netty.transport.native.kqueue) { classifier("osx-x86_64") })
     implementation(variantOf(libs.netty.transport.native.kqueue) { classifier("osx-aarch_64") })
 
-    implementation(libs.jopt)
     implementation(libs.terminalconsoleappender)
     runtimeOnly(libs.jline)
     runtimeOnly(libs.disruptor)
@@ -94,7 +100,6 @@ dependencies {
     implementation(libs.adventure.text.serializer.json.legacy.impl)
     implementation(libs.nightconfig)
     implementation(libs.lmbda)
-    implementation(libs.asm)
     compileOnly(libs.spotbugs.annotations)
     compileOnly(libs.auto.service.annotations)
     testImplementation(libs.mockito)

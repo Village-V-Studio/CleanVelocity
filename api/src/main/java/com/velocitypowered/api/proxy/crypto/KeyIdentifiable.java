@@ -7,7 +7,7 @@
 
 package com.velocitypowered.api.proxy.crypto;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Identifies a type with a public RSA signature.

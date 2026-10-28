@@ -13,7 +13,7 @@ import com.velocitypowered.api.util.Ordered;
 import java.security.PublicKey;
 import java.util.Set;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents session-server cross-signed dated RSA public key.

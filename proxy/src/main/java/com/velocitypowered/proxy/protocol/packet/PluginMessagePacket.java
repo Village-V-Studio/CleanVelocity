@@ -27,8 +27,7 @@ import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.ProtocolUtils.Direction;
 import com.velocitypowered.proxy.protocol.util.DeferredByteBufHolder;
 import io.netty.buffer.ByteBuf;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PluginMessagePacket extends DeferredByteBufHolder implements MinecraftPacket {
 
@@ -42,7 +41,7 @@ public class PluginMessagePacket extends DeferredByteBufHolder implements Minecr
   }
 
   public PluginMessagePacket(String channel,
-                             @MonotonicNonNull ByteBuf backing) {
+                             @Nullable ByteBuf backing) {
     super(backing);
     this.channel = channel;
   }

@@ -29,7 +29,7 @@ import com.velocitypowered.proxy.util.VelocityProperties;
 import io.netty.buffer.ByteBuf;
 import java.util.List;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ServerLoginSuccessPacket implements MinecraftPacket {
 

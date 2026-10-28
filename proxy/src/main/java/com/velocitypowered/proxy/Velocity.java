@@ -66,14 +66,9 @@ public class Velocity {
    * @param args the arguments to the proxy
    */
   public static void main(String... args) {
-    final ProxyOptions options = new ProxyOptions(args);
-    if (options.isHelp()) {
-      return;
-    }
-
     long startTime = System.nanoTime();
 
-    VelocityServer server = new VelocityServer(options);
+    VelocityServer server = new VelocityServer();
     server.start();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> server.shutdown(false),
         "Shutdown thread"));

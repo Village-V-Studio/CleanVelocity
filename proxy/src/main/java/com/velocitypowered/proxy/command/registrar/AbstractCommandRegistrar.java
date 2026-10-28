@@ -19,13 +19,13 @@
 package com.velocitypowered.proxy.command.registrar;
 
 import com.google.common.base.Preconditions;
+import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import com.velocitypowered.api.command.Command;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.proxy.command.VelocityCommands;
 import java.util.concurrent.locks.Lock;
-import org.checkerframework.checker.lock.qual.GuardedBy;
 
 /**
  * Base class for {@link CommandRegistrar} implementations.

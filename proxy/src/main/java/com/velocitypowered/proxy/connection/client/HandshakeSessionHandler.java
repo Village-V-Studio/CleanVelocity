@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The initial handler used when a connection is established to the proxy. This

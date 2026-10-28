@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Handles the actual login stage of a player logging in.
@@ -55,7 +55,7 @@ public class LoginInboundConnection implements LoginPhaseConnection {
   private final Queue<LoginPluginMessagePacket> loginMessagesToSend;
   private volatile Runnable onAllMessagesHandled;
   private volatile boolean loginEventFired;
-  private @MonotonicNonNull IdentifiedKey playerKey;
+  private @Nullable IdentifiedKey playerKey;
 
   LoginInboundConnection(
       InitialInboundConnection delegate) {

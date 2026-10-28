@@ -20,7 +20,7 @@ package com.velocitypowered.proxy.protocol.packet.brigadier;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class PassthroughProperty<T> implements ArgumentType<T> {
 

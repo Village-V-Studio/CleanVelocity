@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Objects;
 import javax.imageio.ImageIO;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Minecraft server favicon. A Minecraft server favicon is a 64x64 image that can be

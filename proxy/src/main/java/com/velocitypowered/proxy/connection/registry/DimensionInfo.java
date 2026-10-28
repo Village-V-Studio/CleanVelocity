@@ -20,7 +20,7 @@ package com.velocitypowered.proxy.connection.registry;
 
 import com.google.common.base.Preconditions;
 import com.velocitypowered.api.network.ProtocolVersion;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents basic information for a Minecraft dimension.

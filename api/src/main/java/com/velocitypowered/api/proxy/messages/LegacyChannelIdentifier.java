@@ -10,7 +10,7 @@ package com.velocitypowered.api.proxy.messages;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import java.util.Objects;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a legacy channel identifier (for Minecraft 1.12 and below). For modern 1.13 plugin

@@ -21,7 +21,7 @@ package com.velocitypowered.proxy.protocol.util;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufHolder;
 import io.netty.util.IllegalReferenceCountException;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A special-purpose implementation of {@code ByteBufHolder} that can defer accepting its buffer.
@@ -29,11 +29,11 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
  */
 public class DeferredByteBufHolder implements ByteBufHolder {
 
-  @MonotonicNonNull
+  @Nullable
   private ByteBuf backing;
 
   public DeferredByteBufHolder(
-      @MonotonicNonNull ByteBuf backing) {
+      @Nullable ByteBuf backing) {
     this.backing = backing;
   }
 

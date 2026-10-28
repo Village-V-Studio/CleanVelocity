@@ -27,8 +27,7 @@ import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the contents of a {@link IdentifiedKey}.
@@ -39,8 +38,8 @@ public class IdentifiedKeyImpl implements IdentifiedKey {
   private final PublicKey publicKey;
   private final byte[] signature;
   private final Instant expiryTemporal;
-  private @MonotonicNonNull Boolean isSignatureValid;
-  private @MonotonicNonNull UUID holder;
+  private @Nullable Boolean isSignatureValid;
+  private @Nullable UUID holder;
 
   public IdentifiedKeyImpl(Revision revision, byte[] keyBits, long expiry,
       byte[] signature) {

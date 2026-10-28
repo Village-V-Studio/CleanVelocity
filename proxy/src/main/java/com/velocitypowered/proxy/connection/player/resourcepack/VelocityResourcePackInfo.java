@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import net.kyori.adventure.resource.ResourcePackRequest;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Implements {@link ResourcePackInfo}.

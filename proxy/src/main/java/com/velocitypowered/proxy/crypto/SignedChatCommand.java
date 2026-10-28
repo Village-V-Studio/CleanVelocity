@@ -24,7 +24,7 @@ import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a signed chat command.

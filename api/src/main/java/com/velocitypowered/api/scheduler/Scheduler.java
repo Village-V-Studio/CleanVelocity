@@ -11,7 +11,6 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -57,7 +56,7 @@ public interface Scheduler {
      * @param unit the unit of time for {@code time}
      * @return this builder, for chaining
      */
-    TaskBuilder delay(@IntRange(from = 0) long time, @NotNull TimeUnit unit);
+    TaskBuilder delay(long time, @NotNull TimeUnit unit);
 
     /**
      * Specifies that the task should delay its execution by the specified amount of time.
@@ -77,7 +76,7 @@ public interface Scheduler {
      * @param unit the unit of time for {@code time}
      * @return this builder, for chaining
      */
-    TaskBuilder repeat(@IntRange(from = 0) long time, @NotNull TimeUnit unit);
+    TaskBuilder repeat(long time, @NotNull TimeUnit unit);
 
     /**
      * Specifies that the task should continue running after waiting for the specified amount, until

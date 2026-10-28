@@ -26,6 +26,9 @@ import com.google.gson.internal.LazilyParsedNumber;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.BinaryTagType;
@@ -46,20 +49,16 @@ import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.jspecify.annotations.Nullable;
 
 public class ComponentHolder {
   private static final Logger logger = LogManager.getLogger(ComponentHolder.class);
   public static final int DEFAULT_MAX_STRING_SIZE = 262143;
 
   private final ProtocolVersion version;
-  private @MonotonicNonNull Component component;
-  private @MonotonicNonNull String json;
-  private @MonotonicNonNull BinaryTag binaryTag;
+  private @Nullable Component component;
+  private @Nullable String json;
+  private @Nullable BinaryTag binaryTag;
 
   public ComponentHolder(ProtocolVersion version, Component component) {
     this.version = version;

@@ -26,14 +26,13 @@ import com.velocitypowered.proxy.protocol.packet.chat.LastSeenMessages;
 import java.time.Instant;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ChatBuilderV2 {
 
   protected final ProtocolVersion version;
-  protected @MonotonicNonNull Component component;
-  protected @MonotonicNonNull String message;
+  protected @Nullable Component component;
+  protected @Nullable String message;
   protected @Nullable Player sender;
   protected @Nullable Identity senderIdentity;
   protected Instant timestamp;

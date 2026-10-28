@@ -10,7 +10,7 @@ package com.velocitypowered.api.proxy.player;
 import java.util.UUID;
 import net.kyori.adventure.resource.ResourcePackRequestLike;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the information for a resource pack to apply that can be sent to the client.

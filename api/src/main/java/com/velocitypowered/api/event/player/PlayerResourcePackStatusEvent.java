@@ -13,8 +13,7 @@ import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.player.ResourcePackInfo;
 import java.util.UUID;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This event is fired when the status of a resource pack sent to the player by the server is
@@ -25,9 +24,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class PlayerResourcePackStatusEvent {
 
   private final Player player;
-  private final @MonotonicNonNull UUID packId;
+  private final @Nullable UUID packId;
   private final Status status;
-  private final @MonotonicNonNull ResourcePackInfo packInfo;
+  private final @Nullable ResourcePackInfo packInfo;
   private boolean overwriteKick;
 
   /**

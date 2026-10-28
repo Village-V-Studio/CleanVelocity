@@ -23,7 +23,7 @@ import com.velocitypowered.api.proxy.player.SkinParts;
 import com.velocitypowered.proxy.protocol.packet.ClientSettingsPacket;
 import java.util.Locale;
 import java.util.Objects;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Wraps the settings received in the Client Settings packet.

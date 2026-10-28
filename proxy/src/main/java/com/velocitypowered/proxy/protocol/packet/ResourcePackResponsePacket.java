@@ -25,20 +25,19 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.ProtocolUtils.Direction;
 import io.netty.buffer.ByteBuf;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 
 public class ResourcePackResponsePacket implements MinecraftPacket {
 
   private UUID id;
   private String hash = "";
-  private @MonotonicNonNull Status status;
+  private @Nullable Status status;
 
   public ResourcePackResponsePacket() {
   }
 
-  public ResourcePackResponsePacket(UUID id, String hash, @MonotonicNonNull Status status) {
+  public ResourcePackResponsePacket(UUID id, String hash, @Nullable Status status) {
     this.id = id;
     this.hash = hash;
     this.status = status;

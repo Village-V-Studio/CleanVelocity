@@ -54,7 +54,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A session handler that is activated to complete the login phase.
@@ -67,7 +67,7 @@ public class AuthSessionHandler implements MinecraftSessionHandler {
   private final MinecraftConnection mcConnection;
   private final LoginInboundConnection inbound;
   private GameProfile profile;
-  private @MonotonicNonNull ConnectedPlayer connectedPlayer;
+  private @Nullable ConnectedPlayer connectedPlayer;
   private final boolean onlineMode;
   private State loginState = State.START; // 1.20.2+
   private final String serverIdHash;

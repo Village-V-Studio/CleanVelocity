@@ -27,9 +27,8 @@ import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.ProtocolUtils.Direction;
 import com.velocitypowered.proxy.util.except.QuietDecoderException;
 import io.netty.buffer.ByteBuf;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.Arrays;
+import org.jspecify.annotations.Nullable;
 
 public class EncryptionResponsePacket implements MinecraftPacket {
 

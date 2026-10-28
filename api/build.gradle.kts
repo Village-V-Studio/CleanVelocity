@@ -22,9 +22,6 @@ dependencies {
     api(libs.gson)
     api(libs.guava)
 
-    // DEPRECATED: Will be removed in Velocity Polymer
-    api("com.moandjiezana.toml:toml4j:0.7.2")
-
     api(platform(libs.adventure.bom))
     api("net.kyori:adventure-api")
     api("net.kyori:adventure-text-serializer-gson")
@@ -38,7 +35,6 @@ dependencies {
 
     api(libs.slf4j)
     api(libs.guice)
-    api(libs.checker.qual)
     api(libs.brigadier)
     api(libs.bundles.configurate4)
     api(libs.caffeine)

@@ -10,12 +10,10 @@ spotless = "com.diffplug.spotless:8.10.4"
 [libraries]
 adventure-bom = "net.kyori:adventure-bom:5.2.0"
 adventure-text-serializer-json-legacy-impl = "net.kyori:adventure-text-serializer-json-legacy-impl:5.2.0"
-asm = "org.ow2.asm:asm:9.11.1"
 auto-service = "com.google.auto.service:auto-service:1.1.1"
 auto-service-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
 brigadier = "com.velocitypowered:velocity-brigadier:1.0.0-SNAPSHOT"
 caffeine = "com.github.ben-manes.caffeine:caffeine:3.3.1"
-checker-qual = "org.checkerframework:checker-qual:4.3.1"
 checkstyle = "com.puppycrawl.tools:checkstyle:14.3.0"
 configurate4-hocon = { module = "org.spongepowered:configurate-hocon", version.ref = "configurate4" }
 configurate4-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate4" }
@@ -23,7 +21,6 @@ configurate4-gson = { module = "org.spongepowered:configurate-gson", version.ref
 disruptor = "com.lmax:disruptor:4.0.0"
 fastutil = "it.unimi.dsi:fastutil:8.5.19"
 jline = "org.jline:jline-terminal-ffm:4.4.8"
-jopt = "net.sf.jopt-simple:jopt-simple:5.0.4"
 junit = "org.junit.jupiter:junit-jupiter:6.1.3"
 jspecify = "org.jspecify:jspecify:1.0.1"
 kyori-ansi = "net.kyori:ansi:1.1.1"
@@ -39,7 +36,6 @@ log4j-jul = { module = "org.apache.logging.log4j:log4j-jul", version.ref = "log4
 mockito = "org.mockito:mockito-core:5.24.0"
 netty-codec = { module = "io.netty:netty-codec", version.ref = "netty" }
 netty-codec-haproxy = { module = "io.netty:netty-codec-haproxy", version.ref = "netty" }
-netty-codec-http = { module = "io.netty:netty-codec-http", version.ref = "netty" }
 netty-handler = { module = "io.netty:netty-handler", version.ref = "netty" }
 netty-transport-native-epoll = { module = "io.netty:netty-transport-native-epoll", version.ref = "netty" }
 netty-transport-native-kqueue = { module = "io.netty:netty-transport-native-kqueue", version.ref = "netty" }

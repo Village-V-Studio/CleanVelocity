@@ -38,7 +38,7 @@ import com.velocitypowered.proxy.command.brigadier.VelocityBrigadierCommandWrapp
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides utility methods common to most {@link Command} implementations. In particular,

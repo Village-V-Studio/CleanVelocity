@@ -31,8 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Handles building commands for plugins to register.
@@ -43,7 +42,7 @@ public final class VelocityCommandMeta implements CommandMeta {
 
     private final ImmutableSet.Builder<String> aliases;
     private final ImmutableList.Builder<CommandNode<CommandSource>> hints;
-    private @MonotonicNonNull Object plugin;
+    private @Nullable Object plugin;
 
     public Builder(final String alias) {
       Preconditions.checkNotNull(alias, "alias");

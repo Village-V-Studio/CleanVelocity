@@ -34,6 +34,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Implements the {@code /server} command and friends.
@@ -104,7 +105,7 @@ public final class VelocityCommand {
     }
   }
 
-  private record Stop(VelocityServer server, @org.checkerframework.checker.nullness.qual.Nullable String reason)
+  private record Stop(VelocityServer server, @Nullable String reason)
       implements Command<CommandSource> {
     @Override
     public int run(final CommandContext<CommandSource> context) {

@@ -31,14 +31,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ResourcePackRequestPacket implements MinecraftPacket {
 
-  private @MonotonicNonNull UUID id; // 1.20.3+
-  private @MonotonicNonNull String url;
-  private @MonotonicNonNull String hash;
+  private @Nullable UUID id; // 1.20.3+
+  private @Nullable String url;
+  private @Nullable String hash;
   private boolean isRequired; // 1.17+
   private @Nullable ComponentHolder prompt; // 1.17+
 

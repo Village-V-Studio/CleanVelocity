@@ -10,7 +10,7 @@ package com.velocitypowered.api.proxy.crypto;
 import com.google.common.annotations.Beta;
 import java.security.PublicKey;
 import java.time.Instant;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the signature of a signed object.

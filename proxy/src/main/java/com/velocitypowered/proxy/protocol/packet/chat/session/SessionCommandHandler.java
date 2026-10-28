@@ -23,11 +23,10 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatAcknowledgementPacket;
-import java.util.concurrent.CompletableFuture;
-
 import com.velocitypowered.proxy.protocol.packet.chat.RateLimitedCommandHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedChatHandler;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.concurrent.CompletableFuture;
+import org.jspecify.annotations.Nullable;
 
 public class SessionCommandHandler extends RateLimitedCommandHandler<SessionPlayerCommandPacket> {
 

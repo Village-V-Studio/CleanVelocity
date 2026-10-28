@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.event.ClickCallback;
-import org.checkerframework.checker.index.qual.NonNegative;
 
 /**
  * Click callback manager.
@@ -45,13 +44,13 @@ public class ClickCallbackManager {
 
         @Override
         public long expireAfterUpdate(UUID key, RegisteredCallback value, long currentTime,
-                                      @NonNegative long currentDuration) {
+                                      long currentDuration) {
           return currentDuration;
         }
 
         @Override
         public long expireAfterRead(UUID key, RegisteredCallback value, long currentTime,
-                                    @NonNegative long currentDuration) {
+                                    long currentDuration) {
           final AtomicInteger remainingUses = value.remainingUses();
           if (remainingUses != null && remainingUses.get() <= 0) {
             return 0;

@@ -13,7 +13,7 @@ import static com.google.common.base.Strings.emptyToNull;
 
 import java.util.Objects;
 import java.util.Optional;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a dependency on another plugin.

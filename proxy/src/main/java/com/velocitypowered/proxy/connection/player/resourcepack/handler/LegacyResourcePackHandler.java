@@ -31,16 +31,15 @@ import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Legacy (Minecraft &lt;1.17) ResourcePackHandler.
  */
 public sealed class LegacyResourcePackHandler extends ResourcePackHandler
         permits Legacy117ResourcePackHandler {
-  protected @MonotonicNonNull Boolean previousResourceResponse;
+  protected @Nullable Boolean previousResourceResponse;
   protected final Queue<ResourcePackInfo> outstandingResourcePacks = new ArrayDeque<>();
   private @Nullable ResourcePackInfo pendingResourcePack;
   private @Nullable ResourcePackInfo appliedResourcePack;

@@ -7,7 +7,7 @@
 
 package com.velocitypowered.api.event;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an interface to perform direct dispatch of an event. This makes integration easier to

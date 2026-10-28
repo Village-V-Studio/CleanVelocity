@@ -105,10 +105,8 @@ import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationSt
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Implementation of {@link ProxyServer}.
@@ -148,9 +146,8 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   private static final int PRE_SHUTDOWN_TIMEOUT = Integer.getInteger("velocity.pre-shutdown-timeout", 10);
 
   private final ConnectionManager cm;
-  private final ProxyOptions options;
-  private @MonotonicNonNull VelocityConfiguration configuration;
-  private @MonotonicNonNull KeyPair serverKeyPair;
+  private @Nullable VelocityConfiguration configuration;
+  private @Nullable KeyPair serverKeyPair;
   private final ServerMap servers;
   private final VelocityCommandManager commandManager;
   private final AtomicBoolean shutdownInProgress = new AtomicBoolean(false);
@@ -168,7 +165,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   private final VelocityChannelRegistrar channelRegistrar = new VelocityChannelRegistrar();
   private final ServerListPingHandler serverListPingHandler;
 
-  VelocityServer(final ProxyOptions options) {
+  VelocityServer() {
     pluginManager = new VelocityPluginManager(this);
     eventManager = new VelocityEventManager(pluginManager);
     commandManager = new VelocityCommandManager(eventManager, pluginManager);
@@ -177,7 +174,6 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     cm = new ConnectionManager(this);
     servers = new ServerMap(this);
     serverListPingHandler = new ServerListPingHandler(this);
-    this.options = options;
   }
 
   public KeyPair getServerKeyPair() {
@@ -229,8 +225,6 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     cm.getBossGroup().terminationFuture().syncUninterruptibly();
   }
 
-  @EnsuresNonNull({ "serverKeyPair", "servers", "pluginManager", "eventManager", "scheduler",
-      "console", "cm", "configuration" })
   void start() {
     logger.info("Enabling {} {}.", getVersion().getName(), getVersion().getVersion());
     console.setupStreams();
@@ -266,14 +260,8 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
 
     registerTranslations();
 
-    for (ServerInfo cliServer : options.getServers()) {
-      servers.register(cliServer);
-    }
-
-    if (!options.isIgnoreConfigServers()) {
-      for (Map.Entry<String, String> entry : configuration.getServers().entrySet()) {
-        servers.register(new ServerInfo(entry.getKey(), AddressUtil.parseAddress(entry.getValue())));
-      }
+    for (Map.Entry<String, String> entry : configuration.getServers().entrySet()) {
+      servers.register(new ServerInfo(entry.getKey(), AddressUtil.parseAddress(entry.getValue())));
     }
 
     loadPlugins();
@@ -286,19 +274,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     // init console permissions after plugins are loaded
     console.setupPermissions();
 
-    final Integer port = this.options.getPort();
-    if (port != null) {
-      logger.debug("Overriding bind port to {} from command line option", port);
-      this.cm.bind(new InetSocketAddress(configuration.getBind().getHostString(), port));
-    } else {
-      this.cm.bind(configuration.getBind());
-    }
-
-    final Boolean haproxy = this.options.isHaproxy();
-    if (haproxy != null) {
-      logger.debug("Overriding HAProxy protocol to {} from command line option", haproxy);
-      configuration.setProxyProtocol(haproxy);
-    }
+    this.cm.bind(configuration.getBind());
   }
 
   private void registerTranslations() {

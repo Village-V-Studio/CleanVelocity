@@ -7,7 +7,7 @@
 
 package com.velocitypowered.api.command;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A simple command, modelled after the convention popularized by

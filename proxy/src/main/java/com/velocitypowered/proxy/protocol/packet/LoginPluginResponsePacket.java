@@ -26,7 +26,7 @@ import com.velocitypowered.proxy.protocol.ProtocolUtils.Direction;
 import com.velocitypowered.proxy.protocol.util.DeferredByteBufHolder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.Nullable;
 
 public class LoginPluginResponsePacket extends DeferredByteBufHolder implements MinecraftPacket {
 
@@ -41,7 +41,7 @@ public class LoginPluginResponsePacket extends DeferredByteBufHolder implements 
     super(Unpooled.EMPTY_BUFFER);
   }
 
-  public LoginPluginResponsePacket(int id, boolean success, @MonotonicNonNull ByteBuf buf) {
+  public LoginPluginResponsePacket(int id, boolean success, @Nullable ByteBuf buf) {
     super(buf);
     this.id = id;
     this.success = success;

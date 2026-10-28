@@ -20,7 +20,7 @@ package com.velocitypowered.proxy.protocol.packet.brigadier;
 
 import com.velocitypowered.api.network.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An argument property serializer that will serialize and deserialize nothing.
