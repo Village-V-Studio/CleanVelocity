@@ -1,7 +1,7 @@
 [versions]
 configurate4 = "4.2.0"
 log4j = "2.26.1"
-netty = "4.2.19.Final"
+netty = "4.2.20.Final"
 
 [plugins]
 shadow = "com.gradleup.shadow:9.6.1"

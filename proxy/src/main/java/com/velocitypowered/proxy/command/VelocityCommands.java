@@ -80,7 +80,10 @@ public final class VelocityCommands {
           literalBuilder.then(wrap(child, registrant));
         }
         if (delegate.getRedirect() != null) {
-          literalBuilder.redirect(wrap(delegate.getRedirect(), registrant));
+          literalBuilder.forward(
+              wrap(delegate.getRedirect(), registrant),
+              delegate.getRedirectModifier(),
+              delegate.isFork());
         }
         yield literalBuilder.build();
       }
@@ -93,7 +96,10 @@ public final class VelocityCommands {
           argBuilder.then(wrap(child, registrant));
         }
         if (delegate.getRedirect() != null) {
-          argBuilder.redirect(wrap(delegate.getRedirect(), registrant));
+          argBuilder.forward(
+              wrap(delegate.getRedirect(), registrant),
+              delegate.getRedirectModifier(),
+              delegate.isFork());
         }
         yield argBuilder.build();
       }

@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-26.04
     permissions:
       contents: write
+    env:
+      FULL_VERSION: ""
+      CLEAN_VERSION: ""
 
     steps:
       - name: Checkout repository
@@ -55,7 +58,7 @@ jobs:
             **Full Changelog**: 
 
             Requires Java 25 or higher.
-            Velocity API - 4.3.0
+            Velocity API - 4.3.1
           draft: false
           prerelease: false
           files: proxy/build/libs/CleanVelocity-${{ env.CLEAN_VERSION }}.jar
