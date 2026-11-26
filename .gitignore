@@ -92,7 +92,7 @@ server-icon.png
 run/
 plugins/
 lang/
-test/
+/test/
 
 ### Natives stuff ###
 native/mbedtls
